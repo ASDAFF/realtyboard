@@ -1,0 +1,62 @@
+﻿{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load static %}
+{% load pagination_tags %}
+{% load category %}
+{% block headjs %}
+    <link href="{% static 'css/pagination.css' %}" rel="stylesheet" media="screen">
+    <link type="text/css" href="{% static 'css/obj_list.css' %}" rel="stylesheet">
+    <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/obj_list.js' %}"></script>
+    <!--script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script-->
+{% endblock %}
+{% block title %}
+   Поисковик недвижимости без посредников. Недвижимость Харькова,
+   Киева и Украины | ЦентрИнформ.
+{% endblock %}
+{% block content %}
+
+<div class="main_cat_img">
+<a href="/{{ city_obj.slug }}/prodam-kvartiru" class="cat_img left-in-line">
+    <img src="/static/img/sell_flat.png" alt="#">Продажа квартир</a>
+<a href="/{{ city_obj.slug }}/prodam-gostinku-komnatu" class="cat_img" >
+    <img src="/static/img/sell_comm.png" alt="#">Продажа комнат</a>
+<a href="/{{ city_obj.slug }}/prodam-dom" class="cat_img" >
+    <img src="/static/img/sell_house.png" alt="#">Продажа домов</a>
+<a href="/{{ city_obj.slug }}/prodam-uchastok" class="cat_img" >
+    <img src="/static/img/sell_lot.png" alt="#">Продажа участков</a>
+<a href="/{{ city_obj.slug }}/prodam-kommercheskuyu-nedvizhimost" class="cat_img right-in-line" >
+    <img src="/static/img/sell_com.png" alt="#"> Продажа помещений</a>
+<a href="/{{ city_obj.slug }}/sdam-kvartiru" class="cat_img left-in-line" >
+    <img src="/static/img/rent_flat.png" alt="#">Аренда квартир</a>
+<a href="/{{ city_obj.slug }}/sdam-gostinku-komnatu" class="cat_img" >
+    <img src="/static/img/rent_comm.png" alt="#">Аренда комнат</a>
+<a href="/{{ city_obj.slug }}/sdam-dom" class="cat_img" >
+    <img src="/static/img/rent_house.png" alt="#">Аренда домов</a>
+<a href="/{{ city_obj.slug }}/sdam-uchastok" class="cat_img" >
+    <img src="/static/img/rent_lot.png" alt="#">Аренда участков</a>
+<a href="/{{ city_obj.slug }}/sdam-kommercheskuyu-nedvizhimost" class="cat_img right-in-line">
+    <img src="/static/img/rent_com.png" alt="#">Аренда помещений</a>
+</div>
+
+{% include "index_filter_form.html" %}
+
+<!--img src="{% static 'images/banners/new_year_cristmas.jpg' %}" alt="holidays" id="holiday-bunner"-->
+<!--p class="message-for-users">Внимание, изменились цены на доступ к базе. Новые цены смотрите в разделе <a href="/oplata">"оплата"</a></p-->
+<!--button id="show-subloc-map">Показать карту</button>
+<div id="map" style="width:900px; height: 600px"></div>
+<div id="coords"></div-->
+<h4 id="last-with-photo">Последние объявления с фото</h4>
+<div id="index-adv-list">
+    {% if top_advert  %}
+{#        {% include "board/advert_for_list_top.html" %}#}
+        <br>
+    {% endif %}
+    {% if vip_advert %}
+        {% include "board/advert_for_list_vip.html" %}
+    {% endif %}
+    {% include "board/advert_for_list.html" %}
+</div>
+    {% paginate %}
+{% endblock %}

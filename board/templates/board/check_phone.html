@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load category %}
+
+{% load static from staticfiles %}
+{% load pagination_tags %}
+{% block title %}{{ title }}{% endblock %}
+{% block headjs %}
+{% endblock %}
+{% block content %}
+    {% if level_up == 1 %}
+        <div class="posr">
+            <form method="get" action="/proverka_na_posrednika/">
+                <input name="telefon" type="tel" placeholder="Введите номер телефона" class="posr_input" value="">
+                <input type="hidden" name="version" value="1">
+                <input type="submit" value="ПРОВЕРИТЬ" class="search-btn">
+            </form>
+        </div>
+    {% elif level_up == 2%}
+        <div class="posr_center">
+            <div class="posr1 well" >
+                Проверить данный номер: {{ phone }}
+                <br>
+                <br>
+                <form method="get" action="/proverka_na_posrednika/">
+                    <input name="telefon" type="hidden" value="{{ phone }}">
+                    <input type="hidden" name="version" value="2">
+                    <input type="submit" value="OK" class="search-btn">
+                </form>
+            </div>
+        </div>
+    {% elif level_up == 3%}
+        <div class="posr_center">
+            <div class="grin_qw well" >
+                {% if conclusion %}
+                    <p>Данный номер {{ conclusion.phone|phoneformat }} числится в базе посредников!<p> 
+                    <form method="get" action="/proverka_na_posrednika/" >
+                        <input type="submit" value="ОК" class="search-btn">
+                    </form>
+                    Посмотреть все объявления с данным номером телефона?
+                    <form method="get" action="/advert_by_phone/" style="margin-top: 10px;">
+                        <input type="submit" value="Найти" class="search-btn">
+                        <input name="telefon" type="hidden" value="{{ phone }}" >
+                    </form>
+                {% else %}
+                    Данный номер НЕ числится в базе посредников (хозяин) : {{ phone }}
+                    <form method="get" action="/proverka_na_posrednika/" >
+                        <input style="margin-top: 20px;" type="submit" value="ОК" class="search-btn">
+                    </form>
+                    Посмотреть все объявления с данным номером телефона?
+                    <form method="get" action="/advert_by_phone/" style="margin-top: 10px;">
+                        <input type="submit" value="Найти" class="search-btn">
+                        <input name="telefon" type="hidden" value="{{ phone }}" >
+                    </form>
+
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

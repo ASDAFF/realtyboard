@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% load static %}
+{% load staticfiles %}
+{% load static from staticfiles %}
+{% load pagination_tags %}
+{% load category %}
+{% load personal_template_tags %}
+{% block title %}Личный кабинет{% endblock title %}
+{% block headjs %}
+    <link rel="stylesheet" href="{% static 'css/obj_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/personal.css' %}">
+    <script src="{% static 'js/personal.js' %}"></script>
+{% endblock headjs %}
+
+{% block content %}
+    <div id="pers_profile">
+        <h3>Личный кабинет</h3>
+        <table id="contact_inf">
+            <tr><td class="pers_data_name">Логин</td>
+                <td>{{ user.get_username }}</td>
+            </tr>
+            <tr><td class="pers_data_name">ФИО</td>
+                <td>{{ user.get_full_name }}</td>
+            </tr>
+            <tr><td class="pers_data_name">e-mail</td>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr><td class="pers_data_name">Телефон</td>
+                <td>
+                <div id="pers_phones">
+                    {% for phone in user.phone_set.all %}
+                        {% if phone.main %}
+                            <p class="bold" title="Это осовной телефон для связи с вами">0{{ phone }}</p>
+                        {% else %}
+                            <p>0{{ phone }}</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                </td>
+            </tr>
+            <tr class="bold" style="height: 50px;">
+                <td class="pers_data_name">Баланс</td>
+                <td id="pers-balance">{{ user.current_balance }} грн</td>
+                <td><button id="add-balance-funds">Пополнить баланс</button></td>
+            </tr>
+                {% if active_bases %}
+                    <tr class="bold" id="base-access-title">
+                        <td class="pers_data_name">Доступ к базе:</td>
+                        <td class="pers-base-access"></td>
+                        <td><button id="add-base-funds">Продлить/открыть доступ</button></td>
+                    </tr>
+                    {% for base in active_bases %}
+                        <tr class="bold">
+                            <td class="pers_data_name">{{ base.service.ru_name }}</td>
+                            <td class="pers-base-access">до {{ base.exp_date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr class="bold" id="base-access-title">
+                        <td class="pers_data_name">Доступ к базе</td>
+                        <td class="pers-base-access">Закрыт</td>
+                        <td><button id="add-base-funds" >Открыть доступ</button></td>
+                    </tr>
+                {% endif %}
+            </tr>
+            <tr>
+                <td class="pers_data_name">
+                    <a href="{% url 'profile_set' %}">Изменить данные</a>
+                </td>
+            </tr>
+        </table>
+        <div class="r_float" id="pers_supp_q">
+            <lable>Задать вопрос службе техподдержки:<br>
+                <textarea type="text"
+                    placeholder="Введите свой вопрос, ответ прийдет Вам на почту, указанную в контактных данных"></textarea>
+            </lable><br>
+            <button class="search-btn" id="pers-question-btn">Отправить вопрос</button>
+        </div>
+        <a href="{% url 'oplata' %}" id="pers-oplata-link">Реквизиты и способы оплаты</a>
+        <div id="payment-block">
+            <img src="{% static 'images/personal/blue_close.png' %}"
+                alt="" class="close_pic" title="Закрыть">
+            <table>
+                <tr>
+                    <td class="payment-left">Способ оплаты</td>
+                    <td class="payment-right" id="pay-purpose"></td>
+                </tr>
+                <tr>
+                    <td class="payment-left">
+                        <label title="Оплата с вашей банковской карты прямо на сайте">
+                            <input name="pay-way" type="radio" pay-way="liqpay">
+                                Банковская карта</label>
+                        <label title="Оплата с вашего WMU кошелька">
+                            <input name="pay-way" type="radio" pay-way="webmoney">
+                                Webmoney</label>
+                        <label id="from-balance" title="Списать с вашего ЦентрИнформ баланса">
+                            <input name="pay-way" type="radio" pay-way="balance">
+                                Списать с баланса</label>
+                        <a title="Посмотреть другие возможные способы оплаты"
+                            href="{% url 'oplata' %}">Другой способ</a>
+                    </td>
+                    <td class="payment-right" id="payment-amount-form"></td>
+                </tr>
+            </table>
+            <div id="hidden-pay-btns">
+                <div id="base-city-selection">
+                    <select id="ab-city-select">
+                        {% for base in available_bases %}
+                            <option value="{{ base.name }}">{{ base.ru_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="search-btn ab-city-btn">OK</button>
+                </div>
+            </div>
+        </div>
+        <p id="pers_select">Ваши объявления:
+            <a id="active_list" href="{% url 'profile' %}">Активные</a>
+            <a id="inactive_list" href="?list=inactive">Неактивные</a>
+            <a id="deleted_list" href="?list=deleted">Удаленные</a>
+            <a id="paid_list" href="?list=paid" >Оплаченные</a>
+            <a id="vip_list" href="?list=vip">VIP</a>
+            <a id="top_list" href="?list=top">TOP</a>
+            <a id="favorite_list" href="?list=favorite">Мой блокнот</a>
+        </p>
+        {% autopaginate advert_list 10 %}
+        {% paginate %}
+        <div id="adverts-list">
+            {% for advert in advert_list %}
+                <div class="ad-preview" id="item{{ advert.id }}">
+                    <div class="item-pic">
+                        <a href="{{ advert.get_absolute_url }}">
+                            <img src="{% get_media_prefix %}{{ advert.get_photo_preview }}"
+                                    alt="нет фотографии" target="_blank">
+                        </a>
+                    </div>
+                    <div class="item-info">
+                        <p class="bold">
+                        {% if advert.price_uah %}
+                            {{ advert.price_uah|intspace }} грн
+                        {% else %}
+                            {% if advert.price_usd %}
+                                {{ advert.price_usd|intspace }} $
+                            {% endif %}
+                        {% endif %}
+                        </p>
+                        <p class="up_time">
+                            Обновлено:<br>
+                            {{ advert.date_of_update|date:"d.m.y в H:i" }}
+                        </p>
+                        <p class="create_time">Создано: {{ advert.creation_date|date:"d.m.y" }}</p>
+                        <p class="adv-code">Код: {{ advert.id }}</p>
+                    </div>
+                    <div class="item-main">
+                        <h3><a href="{{ advert.get_absolute_url }}">{{ advert.title }}</a></h3>
+                        <p class="item-text">{{ advert.main_text }}</p>
+                        {% if list_type == 'favorite' %}
+                            <button class="pers_del_fav" value="{{ advert.pk }}">Убрать из блокнота</button>
+                        {% elif list_type == 'deleted' %}
+                            <button class="pers_recover_btn" value="{{ advert.pk }}">Восстановить</button>
+                        {% else %}
+                            <button  value="{{ advert.pk }}"
+                                title="Добавить объявление в VIP-блок"
+                                {% if 'adv_vip' in advert.services.keys %}
+                                    class="pers_vip_btn active-serv">VIP
+                                    {{ advert.services.adv_vip }} дн.</button>
+                                {% else %}
+                                    class="pers_vip_btn">VIP</button>
+                                {% endif %}
+                            <button value="{{ advert.pk }}"
+                                title="Добавить объявление в ТОП-блок"
+                                {% if 'adv_top' in advert.services.keys %}
+                                    class="pers_top_btn active-serv">ТОП
+                                    {{ advert.services.adv_top }} дн.</button>
+                                {% else %}
+                                    class="pers_top_btn">ТОП</button>
+                                {% endif %}
+                            <button value="{{ advert.pk }}" title="Сделать выделенным"
+                                {% if 'adv_highlight' in advert.services.keys %}
+                                    class="pers_hlight_btn active-serv">Выделено
+                                    {{ advert.services.adv_highlight }} дн.</button>
+                                {% else %}
+                                    class="pers_hlight_btn">Выделить</button>
+                                {% endif %}
+                            <button value="{{ advert.pk }}"
+                                title="Автоматически обновлять дату обновления"
+                                {% if 'adv_auto_up' in advert.services.keys %}
+                                    class="pers_autoup_btn active-serv">Автоап
+                                    {{ advert.services.adv_auto_up }} дн.</button>
+                                {% else %}
+                                    class="pers_autoup_btn">Автоподнятие</button>
+                                {% endif %}
+                            <a href="{% url 'property_update' pk=advert.pk %}" class="pers_edit_btn"><button class="pers_edit_btn">Изменить</button></a>
+                            {% if advert.is_active %}
+                                {% if advert.up_available %}
+                                    <button  class="pers_up_btn" value="{{ advert.pk }}">Обновить</button>
+                                {% endif %}
+                                <button class="pers_deact_btn" value="{{ advert.pk }}">В черновик</button>
+                            {% else %}
+                                <button class="pers_act_btn" value="{{ advert.pk }}">Опубликовать</button>
+                            {% endif %}
+                            <button class="pers_del_btn" value="{{ advert.pk }}">Удалить</button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>Нет объявлений</p>
+            {% endfor %}
+        </div>
+        {% paginate %}
+    </div>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="black-div" postid="{{ object.id }}">
+        <div><span class="small-ttl">Регион:</span> {{ object.city.name }}</div>
+        {% if object.address %}
+            <div><span class="small-ttl">Адрес:</span> {{ object.address }}</div>
+        {% endif %}
+        <div><span class="small-ttl">Телефоны:</span> 
+            {% for phone in object.phone.all %}
+                0{{ phone.phone }},
+            {% endfor %}
+        </div>
+        <div class="small-ttl">Схема мошенничества:</div>
+        <p>{{ object.text }}</p>
+        <div><span class="small-ttl">Дата публикации:</span>
+            {{ object.post_date|date:"d E Y" }}
+            <button class="search-btn add-black-comment">Прокомментировать</button>
+        </div>
+        <div class="black-comments">
+            {% if object.blacklistcomment_set.all.count %}
+                <p class="black-comments-head">Последние добавленные комментарии: 
+                    {% if object.blacklistcomment_set.all.count > 4 %}
+                        <span class="count-comment">всего комментариев
+                            {{ object.blacklistcomment_set.all.count }}</span>
+                    {% endif %}
+                {% for comment in object.blacklistcomment_set.all %}
+                    {% include "news/black_comment.html" %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

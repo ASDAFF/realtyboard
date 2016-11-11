@@ -1,0 +1,65 @@
+{% extends "lesnoe/base.html" %}
+{% load static %}
+{% block content %}
+<div id="pod">
+    <div id="left" class="inf">
+        <p class="green">Проект {{ object.z500_id }}</p>
+        <table class="projt">
+            <tr>
+                <td class="trinfo">Площадь жилая/общая</td>
+                <td><span class="bold">{{ object.area_living }}</span> м&sup2;
+                    / <span class="bold">{{ object.area_total }}</span> м&sup2;</td>
+            </tr>
+            <tr>
+                <td class="trinfo">Площадь гаража</td>
+                <td><span class="bold">{{ object.area_garage }}</span> м&sup2;</td>
+            </tr>
+            <tr>
+                <td class="trinfo">Площадь 2-го этажа</td>
+                <td><span class="bold">{{ object.area_2nd_fl }}</span> м&sup2;</td>
+            </tr>
+            <tr>
+                <td class="trinfo">Объем</td>
+                <td><span class="bold">{{ object.volume }}</span> м&sup3;</td>
+            </tr>
+            <tr>
+                <td class="trinfo">Высота</td>
+                <td><span class="bold">{{ object.height }}</span> м</td>
+            </tr>
+            <tr>
+                <td class="trinfo">Угол наклона крыши</td>
+                <td><span class="bold">{{ object.roof_angle }}</span>&deg;</td>
+            </tr>
+            <tr>
+                <td class="trinfo">Минимальные размеры участка</td>
+                <td><span class="bold">{{ object.min_plot_width }}</span> м
+                    / <span class="bold">{{ object.min_plot_length }}</span> м</td>
+            </tr>
+            <tr>
+                <td class="trinfo"><br>Цена проекта</td>
+                <td><span class="price"><br>{{ object.project_price }}</span> грн</td>
+            </tr>
+        </table>
+    </div>
+    <div id="right">
+        <div id="links">
+            {% if object.get_previous_id %}
+                <a href="{% url 'lesnoe_project' pk=object.get_previous_id %} " 
+                    class="green">&laquo;Предыдущий проект</a>&nbsp;
+            {% endif %}
+            <a href="{% url 'lesnoe_projects' %}" class="green">Назад к списку</a>
+            &nbsp;
+            {% if object.get_next_id %}
+                <a href="{% url 'lesnoe_project' pk=object.get_next_id %}" 
+                    class="green">Следующий проект&raquo;</a>
+            {% endif %}
+        </div>
+        {% for img in object.projectimg_set.all %}
+            <a href="{{ img.picture.url }}" class="fancybox" 
+                    rel="group2" title="{{ img.description }}">
+                <img src="{{ img.picture.url }}" class="projim" alt="image"></a>
+        {% endfor %}
+    </div>
+    <div class="clear"></div>
+</div>
+{% endblock content %}

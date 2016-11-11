@@ -1,0 +1,296 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load static from staticfiles %}
+{% load pagination_tags %}
+{% load category %}
+{% load poll %}
+{% block title %}Список{% endblock %}
+{% block headjs %}
+    <link href="{% static 'css/chosen.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'css/pagination.css' %}" rel="stylesheet" media="screen">
+    <link type="text/css" href="{% static 'css/obj_list.css' %}" rel="stylesheet">
+    <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/matreshka-1.3.2/matreshka.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/obj_list.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/progrid.js' %}"></script>
+{% endblock headjs %}
+{% block content %}
+    <div id="index_filter" class='well form-search extend'>
+        <div id="block-filter-wrap" class="base-filter-wrap">
+            <div class="block-filter left-block">
+                <div class="i-want">Я хочу {{ filterform.action }}{{ filterform.object_all }}
+                    <div id="rent-term">{{ filterform.rent_term }}</div>
+                </div>
+                <div id="in-region">В регионе {{ filterform.city }}</div>
+                <div>Показать за {{ filterform.term_search }}</div>
+            </div>
+            
+            <div class="block-filter locality">
+                
+                <label id="new-building">Новострой {{ filterform.new_building }}</label>
+                <div id="house-type">
+                    {% for house in filterform.house_type %}
+                        {{ house }}                  
+                    {% endfor %}
+                </div>
+                <div id="fldSublocality">
+                    Район: <span class="to-push">выбрать</span>
+                    <div id="loc-wrap">
+                        <div id="subloc-tab" class="loc-tab active-tab">Город</div>
+                        <div id="province-tab" class="loc-tab">Область</div>
+                        <img src="{% static 'images/personal/blue_close.png' %}"
+                                class="box-select-close" title="Закрыть">
+                        <div id="sublocality-choice">
+                            {% sublocality_tag filterform big_subloc_list city_obj %}
+                        </div>
+                        <div id="province-choice">
+                            <div class="province-list">
+                                {% if filterform.province %}
+                                    {% for item in filterform.province %}
+                                        {{ item }}
+                                    {% endfor %}
+                                {% else %}
+                                    <p>Для вашего города выбор районов не доступен</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="ok-tab">OK</div>
+                    </div>
+                </div>
+                <div id="fldMetro">Метро: <span class="to-push">выбрать</span>
+                    <div id="metr-choice">
+                        <img src="{% static 'images/personal/blue_close.png' %}"
+                                class="box-select-close" title="Закрыть">
+                        {% metro_tag filterform metro_lines %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="block-filter RoomsNum">
+                <div id="fldRoomsNum">
+                    <div class="room-num">Кол-во комнат: &nbsp;{{ filterform.rooms_num }}</div>
+                    <div class="rooms">Комнат: &nbsp;{{ filterform.rooms_num }}</div>
+                </div>
+                <div id="fldObjType">
+                    Тип объекта: <span class="to-push">выбрать</span>
+                    <div id="object-choice">
+                        {{ filterform.object_type }}
+                        <img src="{% static 'images/personal/blue_close.png' %}"
+                                alt="" class="box-select-close">
+                    </div>
+                </div>
+                <div id='price'>
+                    Цена от {{ filterform.min_price }}
+                    до {{ filterform.max_price }} {{ filterform.currency }}
+                </div>
+                {{ filterform.text_filter }}
+            </div>
+            
+            <div class="block-filter right-block">
+                <a class="btn" id="reset-filter" href="{{ request.path }}" >Сбросить все фильтры</a>
+                <div>
+                    <button id='btn_filter1' class='btn search' form="search_query">Найти</button>
+                    <button id='btn_filter2' class='btn search' form="search_query" 
+                        name="woagent" value="on">Найти без посредников</button>
+                </div>
+            </div>
+        </div>
+        <div id="chosen-metro"></div>
+        <div id="chosen-subloc"></div>
+    </div>
+    <div id="additional-params">
+        {% if request.user.is_admin %}
+          <label id="id_prozvon_lable">Прозвон: {{ filterform.prozvon }}</label>
+        {% endif %}
+        <div id="display-checked-marks">
+            <label id="my-notes">Мои заметки</label> 
+            {{ filterform.hide_show_notes }}
+            <div id="checked-with-comment">
+                <img src="{% static "images/adicon.png" %}" title="С комментариями"></div>
+            <div id="checked-green" class="green" title="Выделенные зеленым"></div>
+            <div id="checked-blue" class="blue" title="Выделенные синим"></div>
+            <div id="checked-red" class="red" title="Выделенные красным"></div>
+            <div id="checked-yellow" class="yellow" title="Выделенные желтым"></div>
+        </div>
+        <div id="what-to-show">
+            <label>С комментариями {{ filterform.pro_comment }}</label>
+            <label>Все выделенные <input type="checkbox" id="all-marked"></label>
+            {{ filterform.pro_color }}
+            <button class="search-btn" form="search_query">OK</button>
+        </div>
+        <div class="print-wrapper">
+         <!--<img src='{% static 'img/printer.png' %}' onClick='javascript:print(document)' title="Печать"> -->
+            <script>var pfHeaderImgUrl = '';var pfHeaderTagline = '';var pfdisableClickToDel = 0;var pfHideImages = 0;var pfImageDisplayStyle = 'right';var pfDisablePDF = 0;var pfDisableEmail = 1;var pfDisablePrint = 0;var pfCustomCSS = '';var pfBtVersion='1';(function(){var js, pf;pf = document.createElement('script');pf.type = 'text/javascript';if ('https:' === document.location.protocol){js='https://pf-cdn.printfriendly.com/ssl/main.js'}else{js='http://cdn.printfriendly.com/printfriendly.js'}pf.src=js;document.getElementsByTagName('head')[0].appendChild(pf)})();</script><a href="http://www.printfriendly.com" style="color:#000;text-decoration:none;" class="printfriendly" onclick="window.print();return false;" title="Printer Friendly and PDF"><img style="border:none;-webkit-box-shadow:none;box-shadow:none;margin:0 6px"  src="http://cdn.printfriendly.com/pf-print-icon.gif" width="16" height="15" alt="Print Friendly Version of this page" />Печать <img style="border:none;-webkit-box-shadow:none;box-shadow:none;margin:0 6px"  src="http://cdn.printfriendly.com/pf-pdf-icon.gif" width="12" height="12" alt="Get a PDF version of this webpage" />Сохранить в PDF</a>
+            <a href="save_chast.rar"><img src="{% static 'img/txt.png'%}" width="16" height="15">Сохранить в TXT</a>
+            <a href="save_xls.xls"><img src="{% static 'img/xls.png'%}" width="16" height="15">Сохранить в XLS</a>
+        </div> 
+
+        <!-- <img src='{% static 'img/printer.png' %}' 
+            style=" width: 25px; float: right; cursor: pointer"
+            onClick='javascript:print(document)' title="Печать"> #}-->
+    </div>
+    <div class="pro-obj first-obj">
+        <div class="pro-obj-id">Код</div>
+        <div class="pro-obj-subloc">Район</div>
+        <div class="pro-obj-main">Текст</div>
+        <div class="pro-obj-photo">Фото</div>
+        <div class="pro-obj-price">Цена</div>
+        <div class="pro-obj-phone">Телефон</div>
+        <div class="pro-obj-date">Дата обновл.</div>
+    </div>
+    {% for advert in object_list %}
+        <div class="pro-obj{% advert_cached_pro_color advert request.user %}">
+            <div class="pro-obj-id">
+                <a href="{{ advert.get_absolute_url }}">{{ advert.id }}</a></div>
+            <div class="pro-obj-subloc">
+                {% if advert.sublocality %}
+                    {{ advert.sublocality }}
+                {% elif advert.big_sublocality %}
+                    {{ advert.big_sublocality }}
+                {% endif %}
+            </div>    
+            <div class="pro-obj-main">
+                <div class="pro-obj-text">
+                   <a href="{{ advert.get_absolute_url }}" class="doska_link">
+                        {{ advert.title|slice:":75" }}
+                    </a>
+                    <p>{{ advert.main_text }}</p>
+                </div>
+                <div class="pro-obj-params">
+                    {% if advert.metro %}
+                        <span class="pro-obj-option">
+                            <img class='pro-metro-logo' 
+                                src="{% static 'images/metro20blue.png' %}" 
+                                alt="Метро"> {{ advert.metro.name }}</span>
+                    {% endif %}
+                    {% if advert.category_id in flatcut and advert.extraflat %}
+                        {% if advert.extraflat.rooms_number %}
+                            <span class="pro-obj-option">
+                                Комнат {{ advert.extraflat.rooms_number }}</span>
+                        {% endif %}
+                        {% if advert.extraflat.floor %}
+                            <span class="pro-obj-option">Этаж {{ advert.extraflat.floor }}
+                            {% if advert.extraflat.floors %}
+                                /{{ advert.extraflat.floors }}
+                            {% endif %}
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                    {% if advert.category_id in housecut and advert.extrahouse and advert.extrahouse.floors %}
+                        <span class="pro-obj-option">Этажей {{ advert.extrahouse.floors }}</span>
+                    {% endif %}
+                    {% if request.user.is_admin and request.GET.prozvon == 'on' and advert.has_relatives %}
+                        <a href="/adverts_with_same_phones/{{ advert.id }}/" target="_black">
+                            Еще {{ advert.count_relatives }}</a>
+                    {% endif %}
+                    {% adv_cached_comment advert.procomment_set.all advert.phone_set.all all_user_comments %}
+                    <a href="{{ advert.get_absolute_url }}" class="detail-triangle" 
+                        title="Перейти к объявлению"></a>
+                    <div class="pro-obj-management">
+                        <img src="{% static 'images/rect1.png' %}" class="option-btn">
+                        <div class="hidden-obj-manages">
+                            <img src="{% static 'images/rect1.png' %}" class="option-btn-help">
+                            <p class="manages-title">Мои пометки (видите только Вы)</p>
+                            {% if request.user.is_admin %}
+                                <p class="obj-admin-btn-block">
+                                    <button class="this-agent">агент</button>
+                                    <button class="this-owner">хозяин</button>
+                                    <button class="this-spam">спам</button>
+                                    <button class="this-unknown">нейтрал</button>
+                                    <a href="/board/{{ advert.id }}/update/" 
+                                        target="_blank"><button>Редактировать</button></a>
+                                    <button class="this-up">обновить</button>
+                                </p>
+                            {% endif %}
+                            <button class="complaint-btn search-btn">Пожаловаться</button>
+                            <label class="apply-by-phone" 
+                                title="Отметьте, чтобы ваши заметки применились для всех объявленияй с такими же номерами телефонов.">
+                                <input type="checkbox"> Применить к номеру телефона</label>
+                            <div class="start-manage">
+                                <p class="start-manage-btn">Добавить комментарий</p>
+                                <div class="pro-obj-comment">
+                                    {% if all_user_comments %}
+                                        <select class="old-comments">
+                                            <option value="0">Предыдущие комментарии</option>
+                                            {% for comment in all_user_comments %}
+                                                <option value="1">{{ comment.text }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    {% endif %}
+                                    <textarea placeholder="Ваш комментарий"></textarea>
+                                    <button class="search-btn save-pro-comment">Сохранить</button>
+                                </div>
+                            </div>
+                            <div class="start-manage">
+                                <p class="start-manage-btn">Отметить объявление</p>
+                                <div class="obj-color-mark">
+                                    <div value="green" class="green color-mark">Отметить зеленым</div>
+                                    <div value="blue" class="blue color-mark">Отметить синим</div>
+                                    <div value="yellow" class="yellow color-mark">Отметить желтым</div>
+                                    <div value="red" class="red color-mark">Отметить красным</div>
+                                    <div value="remove" class="remove-color-mark color-mark">Снять выделение</div>
+                                </div>
+                            </div>
+                            <div class="start-manage">
+                                <p class="remove-from-serp start-manage-btn" 
+                                    title="Это объявление, или объявления с такими же номерами телефонов больше не будут отображаться Вам в выдаче"
+                                    >Удалить из выдачи</p>
+                            </div>
+                            {% if request.user.is_admin %}
+                            <div class="start-manage">
+                                 <button class="this-advert" title="Все объявление с такими же номерами телефонов будут удалины из базы.">Удалить все</button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pro-obj-photo">
+                <a href="{{ advert.get_absolute_url }}">
+                    <img src="/media/{{ advert.get_photo_preview }}" alt="photo"></a></div>
+            <div class="pro-obj-price">
+                {{ advert.price_uah|intspace }} грн<br>
+                <span class="blue-color">{{ advert.price_usd|intspace }} $</span>
+            </div>
+            <div class="pro-obj-phone">
+                {% for phone in advert.phone_set.all %}
+                    <a href= '/advert_by_phone/?telefon={{ phone }} '><p class="obj-phone {% phone_cached_pro_color phone request.user %} phone_owner_{{ phone.agent }}"
+                        title="{% if phone.agent == 1 %}Агент{% elif phone.agent == 4 %}Хозяин{% endif %}">
+                        {{ phone|phoneformat }}</p></a>
+                {% endfor %}
+            </div>
+            <div class="pro-obj-date">
+                {{ advert.date_of_update|date:"d b Y H:i" }}
+                {% if advert.link %}
+                    <a href="{{ advert.link }}">{{ advert.link|slice:"7:18" }}</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    {% paginate %}
+    <div id="psingle" ></div>
+    <div style="clear:both"></div>
+    <script>
+        window.user_id = '{{user.id}}';
+        window.user_email = '{{user.email}}';
+    </script>
+    <script id="complaint-form-template" type="text/html">
+        <div id="compl-dialog">
+            <ul class="errors">
+                <li class="email">Введите корректный email</li>
+                <li class="reason">Укажите причину</li>
+            </ul>
+            <label>Ваша почта: <input type="text" class="email"></label>
+            <label>Что не так с объявлением</label>
+            <label><input class="reason-r" name="course" type="radio"> Неверный район/метро</label>
+            <label><input class="reason-r" name="course" type="radio"> Неверная цена</label>
+            <label><input class="reason-r" name="course" type="radio"> Объявление уже неактуально</label>
+            <label><input class="reason-r" name="course" type="radio"> Спам</label>
+            <label><input class="reason-r" name="course" type="radio"> Неверно определен агент/хозяин</label>
+            <label><input class="reason-r" name="course" type="radio"> Другое</label>
+            <input class="reason-t" type="text" disabled="disabled">
+            <button class="submit search-btn">Отправить</button>
+            <button class="cancel search-btn">Отмена</buton>
+        </div>
+    </script>
+{% endblock content %}

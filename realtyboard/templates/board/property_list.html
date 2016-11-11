@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Список приватных статей{% endblock %}
+
+{% block content %}
+<div class="art-content">
+    {% for property in object_list %}
+        <div class="post">
+            <div class="post_name"><h3>{{ property.title }}</h3></div>
+            <div class="post_text">{{ property.text|safe }}</div>
+            <div class="post_info">{{ property.date|date:"d.m.Y в H:i" }}</div>
+        </div>
+    {% empty %}
+        <p>Объектов не обнаружено :(</p>
+    {% endfor %}
+
+    {% if paginator.num_pages > 1 %}
+        {% if page_obj.has_previous %}
+            <a href="/page{{ page_obj.previous_page_number }}/">&larr;</a>
+        {% endif %}
+        <span class="current_page">{{ paginator.number }}</span>
+        {% if page_obj.has_next %}
+            <a href="/page{{ page_obj.next_page_number }}">&rarr;</a>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

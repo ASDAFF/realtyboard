@@ -1,0 +1,16 @@
+<ul class="first-invisible">
+{% for cat in cats %}
+    <li>
+        <a>{{ cat.name }}</a>
+        <ul class="second-invisible">
+            {% for cat_child in cat.childcats %}
+                <li>
+                    <a href="/{{ city }}/{{ cat_child.slug }}">
+                        {{ cat_child.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endfor %}
+</ul>

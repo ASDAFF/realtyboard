@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+{% load staticfiles %}
+{% load static from staticfiles %}
+{% load pagination_tags %}
+{% block headjs %}
+    <link rel="stylesheet" href="{% static 'css/obj_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/personal.css' %}">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link href="{% static 'css/paginator.css' %}" rel="stylesheet" media="screen">
+    <script type="text/javascript">
+    summ = function(){
+        return $(".pay_top:checked").val();
+    }
+        $(document).ready(function() {
+            $('.btn').button();
+            $("#total_pay").val(summ()+' ГРН');
+            $(".pay_top").change(function(){
+                $("#total_pay").val(summ()+' ГРН');
+            });
+        });
+    $(".pay_btn").click(function() {
+        console.log("click pay");
+        var total = $(this).val();
+        $.ajax({
+            url : '/accounts/get_pay/',
+            data : {total:total},
+            dataType : 'json',
+            type : "POST",
+            success : function(res) {
+                window.res = res;
+                if (res['centr']) {
+
+                } else {
+                    $('body').append("<div id='frm_pay' style='display:none;'></div>");
+                    $('#frm_pay').html(res['frm_pay']);
+                    $('#pay_liqpay_form').submit();
+                }
+            },
+            error : function(err) {
+                console.log(err);
+                window.err = err;
+            }
+        });
+    });
+    </script>
+{% endblock%}
+
+{% block content %}
+    <div id="pers_profile">
+<div>
+<form action="/accounts/get_pay/" enctype="multipart/form-data" name='ordering' id='payform' method="post">
+<div id="accordion">
+<div id='pay_top'>
+<h3>Срок поднятия</h3>
+
+<div class="btn-group" data-toggle="buttons">
+
+        <label class="btn btn-primary"  for='pt0'><input type="radio" class="pay_top" value="0" id='pt0'>Не подымать</label>
+
+        <label class="btn btn-primary" for='pt3'><input type="radio" class="pay_top" value="5" id='pt3' pay_data="">3 дня</label>
+
+        <label class="btn btn-primary" for='pt7'><input type="radio" class="pay_top" value="8" id='pt7' pay_data="">7 дней</label>
+
+        <label class="btn btn-primary" for='pt14'><input type="radio" class="pay_top" value="15" id='pt14' pay_data="">14 дней</label>
+
+        <label class="btn btn-primary active" for='pt30'><input type="radio" class="pay_top" value="30" checked id='pt30' pay_data="">30 дней</label>
+</div>
+</div>
+<div id='paytype' class="btn-group" data-toggle="buttons">
+<h3>Способ оплаты</h3>
+
+
+        <label for='pay-liqpay' class="btn btn-primary"><input type="radio" name="paytype" id='pay-liqpay' value="liqpay" checked>LiqPay/Банковской картой</label><br>
+        <label for='pay-webmoney' class="btn btn-primary"><input type="radio" name="paytype" id='pay-webmoney' value="webmoney">WebMoney</label><br>
+        <!--input type="radio" name="paytype" id='pay-webmoney' value="webmoney"><label for='pay-webmoney'>WebMoney</label><br-->
+        <label for='pay-centrinform' class="btn btn-primary"><input type="radio" name="paytype" id='pay-centrinform' value="centrpay">Личный Баланс ЦентрИнформ</label>
+</div>
+<div id='payend'>
+<h3>Сумма:</h3>
+
+        <input type='text' id='total_pay' value='35 ГРН'/>
+        <input type='button' value='Оплатить' id='pay_btn'/>
+
+</div>
+</div>
+</form>
+</div>
+</div>
+{% endblock %}

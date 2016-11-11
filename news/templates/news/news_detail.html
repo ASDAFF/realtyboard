@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load static %}
+{% block headjs%}
+<link href="{% static 'css/news.css' %}" rel="stylesheet" media="screen">
+{% endblock%}
+
+{% block title %}{{ object.title }}{% endblock %}
+{% block keywords%}{{ object.key_words }}{% endblock %}
+{% block description%}{{ object.description }}{% endblock %}
+
+{% block search %}
+{% endblock %}
+{% block content %}
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Для страницы Договор аренды квартиры -->
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px;left:239px;position:relative;" data-ad-client="ca-pub-8719193048908072" data-ad-slot="9014719870"></ins>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    <br>
+<h1 style="text-align: center;">{{ object.title }}</h1>
+<br>
+<div class="single-artice">{{ object.article|safe }} Источник: Недвижимость без посредников <a href="/" >www.ci.ua </a></div>
+<p>Published: {{ object.creation_date|date }}</p>
+<br>
+    {{ request.user }}
+    {{ object.author }}
+    {% if request.user.is_staff or request.user == object.author%}
+    <a href="{% url 'news-update' slug=object.slug %}" >Редактировать</a>
+    <a href="{% url 'news-delete' slug=object.slug %}" >Удалить</a>
+    {% endif %}
+{% endblock %}
+<br>

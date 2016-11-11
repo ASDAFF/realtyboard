@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load static from staticfiles %}
+{% block title %}Изменение данных пользователя{% endblock title %}
+{% block headjs %}
+    <link rel="stylesheet" href="{% static 'css/personal.css' %}">
+    <script type="text/javascript" src="{% static 'js/personal.js' %}"></script>
+{% endblock %}
+{% block content %} 
+    <div class="pers-input">
+       <h4>Изменение данных пользователя.</h4>
+       <p>Оставьте поля, которые не хотите изменять, пустыми</p>
+       {% if errors %}
+           {% for error in errors.values %}
+               <p class="error">{{ error }}</p>
+           {% endfor %}
+       {% endif %}
+        <form accept-charset="UTF-8" action="" method="post" class='navbar-form' 
+                id="profile_update">
+            {% csrf_token %}
+            <table class="pers_table">
+                <tr>
+                    <td>Текущий email</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <td>Новый еmail</td>
+                    <td><input name="email" type="text" id="email" value="{{ email }}"></td>
+                    <td id="email_valid" class="yes_no">
+                        <div id="email_pop_up" class="pop_up">
+                            <p>Пользователь с таким адресом электронной почты уже существует!</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr><td colspan="2"><hr></td></tr>
+                <tr>
+                    <td>Новый пароль</td>
+                    <td><input name="password" type="password" id="pass"></td>
+                </tr>
+                <tr>
+                    <td>Повторите пароль</td>
+                    <td><input name="repassword" type="password" id="repass"></td>
+                    <td id="repass_valid" class="yes_no"></td>
+                </tr>
+                <tr><td colspan="2"><hr></td></tr>
+                <tr>
+                    <td>Текущее имя</td>
+                    <td>{{ user.first_name }}</td>
+                </tr>
+                <tr>
+                    <td>Имя</td>
+                    <td><input name="firstname" type="text" value="{{ first_name }}"></td>
+                </tr>
+                <tr><td colspan="2"><hr></td></tr>
+                <tr>
+                    <td>Текущая фамилия</td>
+                    <td>{{ user.last_name }}</td>
+                </tr>
+                <tr>
+                    <td>Фамилия</td>
+                    <td><input name="lastname" type="text" value="{{ last_name }}"></td>
+                </tr>
+                <tr><td colspan="2"><hr></td></tr>
+                <tr>
+                    <td>Телефон</td>
+                    <td>
+                        {% for phone in user.phone_set.all %}
+                            {% if phone.main %}
+                                <div class="phone_checkbox bold">
+                                    0{{ phone }} основной
+                            {% else %}
+                                <div class="phone_checkbox">
+                                    0{{ phone }}
+                                    <label><input type="radio" value="{{ phone }}"
+                                        name="main_phone"> основной</label>
+                            {% endif %}
+                                <label><input type="checkbox" value="{{ phone }}" 
+                                    name="del_{{ phone }}"> удалить</label>
+                            </div>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Добавить телефон</td>
+                    <td class="phone_checkbox">
+                        <input name="phone" type="text" value="{{ phone }}" id="phone">
+                            <label><input type="radio" value="0"
+                                name="main_phone"> основной</label></td>
+                    <td id="phone_valid" class="yes_no">
+                        <div id="phone_pop_up" class="pop_up">
+                            <p>Вводите телефон без +38, код города или оператора и номер, всего 10 цифр.</p>
+                        </div>
+                        <div id="phone_pop_up2" class="pop_up">
+                            <p>Пользователь с таким номером телефона уже существует!</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit" class="search-btn">Сохранить</button>
+            <a class="search-btn" href="{% url 'profile' %}">Отмена</a>
+        </form>
+    </div>
+{% endblock %}

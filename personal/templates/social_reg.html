@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Подтвердите свою электронную почту{% endblock title %}
+{% block headjs %}
+    <link rel="stylesheet" href="{% static 'css/personal.css' %}">
+{% endblock %}
+{% block content %}
+    <div id="r-cont">
+        <h3>Подтверждение электронной почты</h3>
+        <p>Ваша учетная запись {{ network }} не связана ни с одной учетной записью
+            Центринформ.</p>
+        <p>Чтобы связать свою учетную запись {{ network }} с учетной записью Центринформ
+            вы должны указать свою электронную почту и подтвердить, что вы являетесь ее
+            владельцем, для этого перейдите по ссылке в отправленном вам письме.</p>
+        {% if error %}
+            <p class="error">Ошибка отправки, проверьте правильно ли вы указали почту.</p>
+            <p>Если почта указана верно, но сообщение не отправляется, вы можете
+                <a href="{% url 'login' %}">войти</a>, введя логин и пароль, или
+                <a href="{% url 'register' %}">зарегистрироваться</a>, если у вас
+                все еще нет учетной записи на нашем сайте.</p>
+        {% endif %}
+        <div class="pers-input" id="mail-confirm-form">
+            <form action="." method="post">{% csrf_token %}
+                <label>Email: <input type="text" name="email"></label>    
+                <button class="search-btn">Отправить письмо для подтверждения</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

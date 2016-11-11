@@ -1,0 +1,19 @@
+{% load static %}
+<div class="comment-wrap">
+    {% if adv_comment %}
+        <div class="comment-on-adv">
+            <img src="{% static 'images/adicon.png' %}" class="comment-icon">
+            <img src="{% static 'images/delete.png' %}" alt="удалить"
+                comment-id="{{ adv_comment.id }}" title="Удалить комментарий"
+                class="del-pro-comment"><p>{{ adv_comment.text }}</p></div>
+    {% endif %}
+    {% if phone_comments %}
+        {% for comment in phone_comments %}
+            <div class="comment-on-phone">
+                <img src="{% static 'images/phone1.png' %}" class="comment-icon">
+                <img src="{% static 'images/delete.png' %}" title="Удалить комментарий"
+                    alt="удалить" comment-id="{{ comment.id }}"  
+                    class="del-pro-comment"><p>{{ comment.text }}</p></div>
+        {% endfor %}
+    {% endif %}
+</div>

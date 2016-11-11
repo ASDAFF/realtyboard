@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% block headjs%}
+    <link href="{% static 'css/board.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'css/chosen.min.css' %}" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="{% static 'js/modernizr.custom.89634.js' %}"></script>
+    <script async src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <script type="text/javascript" src="{% static 'js/object_form.js' %}"></script>
+    <script async src="{% static 'js/chosen.jquery.min.js' %}"></script>
+{% endblock%}
+{% block search %}
+{% endblock %}
+{% block content %}
+<div class="content_add well">
+    <form action="." method="post" enctype="multipart/form-data" class='navbar-form' >
+        {% csrf_token %} <!-- protection cross-site substitution  -->
+        <input type="hidden" name='cat_id' id='cat_id' value="0">
+        <div class="property-form" id='advert_form'>
+            {{ fastuserform.as_div }}
+            {{ advform.as_div }}
+            <div id='extra_form'>
+                {% for form in extraforms %}
+                    {{ form.as_div }}
+                {% endfor %}
+            </div>
+            <button class="btn" id="add-map-btn" type="button" >Отметить на карте</button>
+            <div id="map"></div>
+            <div id="form-images">
+                {% for image in images %}
+                    <div class="row added" draggable="true" name="im-{{ image.order }}">
+                        <div class="file-preview" style="background-size: 120px, auto; background-image:url(/media/{{image.preview}});background-position: 50% 50%, 50% 50%;"></div>
+                        <img class="del_img" id="{{ image.id }}" src="{% static 'images/trash.png' %}">
+                    </div>
+                {% endfor %}
+                <div class="row new">
+                    <div class="file-preview"></div>
+                    <input class="file-input" type="file" multiple name="image">
+                </div>
+            </div>
+        </div>
+        <input type="submit" class='btn success' value="Сохранить" />
+    </form>
+</div>
+{% endblock %}

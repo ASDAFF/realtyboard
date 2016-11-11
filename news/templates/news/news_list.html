@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load category %}
+{% load pagination_tags %}
+{% load static from staticfiles %}
+{% load pagination_tags %}
+{% block title %}{{ category_title.name }} - ЦентрИнформ{% endblock %}
+{% block headjs %}
+    <link href="{% static 'css/chosen.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'css/pagination.css' %}" rel="stylesheet" media="screen">
+    <link type="text/css" href="{% static 'css/obj_list.css' %}" rel="stylesheet">
+    <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/obj_list.js' %}"></script>
+{% endblock %}
+{% block content %}
+<br>
+{#    <h1 style="display: table; margin: auto; text-align: center;" > <a  href="/novosty" >{{ category_title.name }}</a>  </h1>#}
+    <h1 class="news_title"  >{{ category_title.name }}</h1>
+
+{#    <div class="panel" >dfkjbhudfjkfdf fuguij{{ some_important_news.article | safe }}</div>#}
+    <div class="panel" >{{ some_important_news.article | safe }}</div>
+
+    <ul class="news-list">
+        {% for article in object_list %}
+            <br>
+            <h2><li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li></h2>
+
+           <div style="text-align: justify" >  {{ article.foreword | safe }}</div>
+        {% empty %}
+            <li>No articles yet.</li>
+        {% endfor %}
+    </ul>
+<br>
+{% paginate %}
+    
+<br>
+{% endblock %}
+
+

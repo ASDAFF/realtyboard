@@ -1,0 +1,15 @@
+{% extends "lesnoe/base.html" %}
+{% load static %}
+{% block content %}
+<div id="one">
+    <h1 id="title" class="green">План-схема клубного городка ЛЕСНОЕ</h1>
+    <img id="lef" src="{% static 'lesnoe/img/genplan.jpg' %}" alt="Схема коттеджного городка Лесное"
+            title="План коттеджного городка Лесное">
+    <div id="loc">
+        <script type="text/javascript" charset="utf-8" 
+            src="//api-maps.yandex.ru/services/constructor/1.0/js/?sid=_UCS6weKL0118-38arU1RMN1lEq9IMMZ&width=800&height=500">
+        </script>
+    </div>
+</div>
+{% endblock content %}
+    

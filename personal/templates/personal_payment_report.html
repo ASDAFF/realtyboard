@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+{% block headjs %}
+    <link rel="stylesheet" href="{% static 'css/personal.css' %}">
+{% endblock headjs %}
+{% block content %}
+<p class="along-message">{{ message }}</p>
+<div class="pers-input" id="pay-report">
+    <form action="" method="POST">
+    {% csrf_token %}
+        <div class="form-row">
+            <label for="id_payment_purpose">Назначение платежа</label>
+            {{ form.payment_purpose }} 
+            {{ form.payment_purpose.errors }}
+        </div>
+        <div class="form-row">
+            <label for="id_payment_case">Способ оплаты</label>
+            {{ form.payment_case }}
+            {{ form.payment_case.errors }}
+        </div>
+        <div class="form-row">
+            <label for="id_check_code">Номер чека, операции*</label>
+            {{ form.check_code }} 
+            {{ form.check_code.errors }}
+        </div>
+        <div class="form-row">
+            <label for="id_fio_company">ФИО, организация*</label>
+            {{ form.fio_company }}
+            {{ form.fio_company.errors }}
+        </div>
+        <div class="form-row">
+            <label for="id_username">Ваш логин*</label>
+            {{ form.username }} 
+            {{ form.username.errors }}
+        </div>
+        <div class="form-row">
+            <label for="id_user_email">Электронная почта*</label>
+            {{ form.user_email }} {{ form.user_email.errors }}
+        </div>
+        <div class="form-row">
+            <label for="id_user_phone">Контактный телефон*</label>
+            {{ form.user_phone }} {{ form.user_phone.errors }}
+        </div>
+        <div class="form-row">
+            <label for="id_sum_of_payment">Сумма оплаты*</label>
+            {{ form.sum_of_payment }} {{ form.sum_of_payment.errors }}
+        </div>
+        <div class="form-row">
+            <label for="id_date_of_payment">Дата и время оплаты*</label>
+            {{ form.date_of_payment }} {{ form.date_of_payment.errors }}
+        </div>
+        <button type="submit" class="search-btn">Отправить</button>
+    </form>
+</div>
+{% endblock content %}

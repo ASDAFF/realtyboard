@@ -1,0 +1,33 @@
+{% extends "lesnoe/base.html" %}
+{% load static %}
+{% block content %}
+<div id="pod">
+    <div id="left">
+        <h1>Клубный городок
+            <br><br>
+            <span class="green park">ЛЕСНОЕ</span>
+        </h1>
+        <img id="pic" src="{% static 'lesnoe/img/main.jpg' %}">
+        <p class="green">Отдел продаж:</p>
+        <h4>г.Харьков, ул.Короленко, 23</h4>
+        <p>
+            Тел: 715-12-78<br>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            098-190-59-02<br>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            066-225-25-55<br>
+        </p>
+        <img id="qr"src="{% static 'lesnoe/img/qr-code.gif' %}">
+    </div>
+    <div id="right">
+        {{ text.text1|safe }}
+        
+        <div class="small" id="spoler-link"><a>продажа участков</a></div>
+        <div class="alt2" id="spoler-div">
+            {{ spoiler_text.text1|safe }}
+            <p class="home-callout">&nbsp;</p>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+{% endblock content %}

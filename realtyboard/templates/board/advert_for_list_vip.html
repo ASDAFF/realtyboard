@@ -1,0 +1,79 @@
+{% load static %}
+{% load category %}
+<div class="advert_top_wrap">
+{% if  request.path != "/" %}
+<div class="advert_top" ><a href="{% if category %}/{{city_obj.slug}}/{{category.slug}}/{% endif%}paid_adverts/?tip=1"> VIP-объявления </a></div>
+{% else %}
+<div class="advert_top" ><a href="paid_adverts/?tip=1"> VIP-объявления </a></div>
+{% endif %}
+<!-- <div class="advert_top" ><a href='{% url 'news-update' slug=object.slug %}'> VIP-объявления </a></div> -->
+{% for advert in vip_advert %}
+    <div class="ad-preview {%if advert.id in highlight_advert %} ad-preview-highlight {% endif %}">
+        <div class="item-pic">
+            <a href="{{ advert.get_absolute_url }}" target="_blank">
+                <img src="{% get_media_prefix %}{{ advert.get_photo_preview }}"
+                    alt="нет фотографии" >
+            </a>
+        </div>
+        <div class="item-info">
+            <p class="item-price">{{ advert.price|intspace }}</p>
+            <p>{{ advert.date_of_update|date:"d.E.Y" }}</p>
+            <p class='kod'>Код: {{ advert.id }}</p>
+            {% if request.user in advert.userdata_set.all %}
+                <img src="{% static 'images/star.png' %}" alt="Удалить из блокнота"
+                    class="star-true" title="Удалить из моего блокнота">
+            {% else %}
+                <img src="{% static 'images/star-grey.png' %}" alt="Добавить в блокнот"
+                    class="star" title="Добавить в мой блокнот">
+            {% endif %}
+            {% if request.user.is_admin %}
+                <p class="fast-adm-edit">
+                    <a href="{% url 'property_update' pk=advert.id %}">
+                        <img src="{% static 'img/edit.png' %}"
+                            alt="Редактировать" title="Редактировать">
+                    </a>
+                    &nbsp;
+                    <a href="{% url 'property_delete' pk=advert.id %}" class="fast-adm-del-link">
+                        <img src="{% static 'img/del.png' %}" alt="Удалить"
+                            title="Удалить">
+                    </a>
+                </p>
+            {% endif %}
+        </div>
+        <div class="item-main">
+            <h3><a href="{{ advert.get_absolute_url }}"
+                    title="Перейти к объявлению" class="doska_link">
+                    {{ advert.title }}
+                </a>
+            </h3>
+            <p class="item-text">
+                {{ advert.main_text }}
+            </p>
+
+            <p>
+                {{ advert.city }}
+                {% if advert.sublocality %}
+                    {% if advert.sublocality.in_city != 1 %}
+                        обл.
+                    {% elif advert.sublocality.big_sublocality_id == 121 %}
+                        пригород
+                    {% endif %}
+                    , {{ advert.sublocality }}
+                {% endif %}
+                {% if advert.metro %}, м. {{ advert.metro.name }}{% endif %}
+                {% if advert.extraflat.rooms_number %}
+                    ,&nbsp; {{ advert.extraflat.rooms_number }} комн.
+                {% endif %}
+                {% if advert.phone_set.all.count %}
+                    ,&nbsp; Тел. {{ advert.phone_set.all.0|phoneformat }}
+                {% else %}
+                    ,&nbsp; Тел. {{ advert.raw_phones }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+{% empty %}
+    <p>Объявлений не найдено</p>
+{% endfor %}
+
+</div>

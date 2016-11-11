@@ -1,0 +1,31 @@
+{% if is_paginated %}
+{% load i18n %}
+
+<!--    <form action="?page=1{{ getvars }}{{ hashtag }}" method="get">
+        <label for="page" class="go_to_page_label"> Отправиться на страницу:  </label> <input name="page" class="go_to_page" placeholder="{{ page }}" title="После ввода нажмите 'Enter'">
+    </form> -->
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{{ getvars }}{{ hashtag }}" class="prev">&lsaquo;&lsaquo; {% trans "Предыдущая" %}</a>
+    {% else %}
+        <span class="disabled prev">&lsaquo;&lsaquo; {% trans "Предыдущая" %}</span>
+    {% endif %}
+    {% for page in pages %}
+        {% if page %}
+            {% ifequal page page_obj.number %}
+                <span class="current page">{{ page }}</span>
+            {% else %}
+                <a href="?page={{ page }}{{ getvars }}{{ hashtag }}" class="page">{{ page }}</a>
+            {% endifequal %}
+        {% else %}
+            <span class="dots">...</span>
+        {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{{ getvars }}{{ hashtag }}" class="next">{% trans "Следующая" %} &rsaquo;&rsaquo;</a>
+    {% else %}
+        <span class="disabled next">{% trans "Следующая" %} &rsaquo;&rsaquo;</span>
+    {% endif %}
+</div>
+{% endif %}

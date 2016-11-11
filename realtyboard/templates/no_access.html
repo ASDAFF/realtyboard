@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    <p class="along-message">{{ message }}</p>
+    <p class="along-message"><a href="{% url 'oplata' %}">Подробнее как оплатить</a></p>
+
+{#    <select onChange="if(value!=''){location=value}"  style="display: table; margin: 50px auto;" >#}
+{#        <option value="">Выберите город</option>#}
+{#        <option value="/board/files/kharkov">Харьков</option>#}
+{#        <option value="/board/files/kiev">Киев</option>#}
+{#    </select>#}
+    
+{% endblock %}

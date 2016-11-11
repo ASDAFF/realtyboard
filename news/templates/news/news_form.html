@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load static from staticfiles %}
+{% block title %}Подача новостей{% endblock %}
+{% block headjs %}
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor.js" %}"></script>
+{% endblock %}
+{% block content %}
+
+    <style>
+    .errorlist{
+        color: red;
+        border:solid 3px red;
+    }
+    </style>
+
+<div style="display: table; margin: auto; " >
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Create" />
+</form>
+</div>
+{% endblock %}
+<br>
+
+
+{#<div class="property-form" id='advert_form'>#}
+{#    <form  action="" method="post" enctype="multipart/form-data" class='navbar-form' >#}
+{#        {{ news.as_p }}#}
+{#         <input type="submit" class='btn success' value="Сохранить" />#}
+{#    </form>#}
+{#</div>#}

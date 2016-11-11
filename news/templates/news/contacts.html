@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+{% block headjs %}
+    <script src="{% static 'js/contacts.js' %}"></script>
+{% endblock headjs %}
+{% block content %}
+    <div class="wrap-cont">
+        <h1>ЦентрИнформ - поисковая система недвижимости без посредников</h1>
+        <div class="contact">
+            <img src="{% static 'img/kievstar.png' %}" alt="т">
+            <div class="phone-num">
+                <p>067-57-74-140</p>
+            </div>
+        </div>
+        <div class="contact">
+            <img src="{% static 'img/mts.png' %}" alt="т">
+            <div class="phone-num">
+                <p>099-53-06-621</p>
+                <p>099-08-11-333</p>
+            </div>
+        </div>
+        <div class="contact">
+            <img src="{% static 'img/life.png' %}" alt="т">
+            <div class="phone-num">
+                <p>093-00-99-333</p>
+            </div>
+        </div>
+        <div class="contact">
+            <img src="{% static 'img/email.png' %}" alt="e">
+            <div class="phone-num"><p>centrinform@mail.ru</p></div>
+        </div>
+<!--         <div class="contact">
+            <img src="{% static 'img/icq.png' %}" alt="icq">
+            <div class="phone-num"><p>ICQ 644526794</p></div>
+        </div> -->
+    </div>
+    <div class="contact-links">
+        <a href="{% url 'payment_report' %}" class="search-btn">Сообщить об оплате</a>
+        <a href="{% url 'profile' %}" class="search-btn" id="help-btn">Помощь по сайту</a>
+        <div id="help-form">
+            <div id="resp-mess">
+                {% if not request.user.is_authenticated %}
+                <label>Ваш email</label>
+                <input type="text" id="help-e" name="email" placeholder="для обратной связи">
+                {% endif %}
+                <label>Ваш вопрос</label>
+                <textarea type="text" id="help-q" name="question" placeholder="Вопрос должен быть не короче 10 символов"></textarea>
+            </div>
+            <button class="search-btn" id="send">Отправить</button>
+            <button class="search-btn" id="cancel">Отмена</button>
+        </div>
+        <p>Не нужно задавать нам вопросы через СМС. Пишите на электронную почту, или звоните.</p>
+        <p>Рабочее время: с 8.00 до 22.00 без выходных.</p>
+    </div>
+{% endblock content %}

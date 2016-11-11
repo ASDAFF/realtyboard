@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% load pagination_tags %}
+{% block headjs %}
+    <link rel="stylesheet" href="{% static 'css/obj_list.css' %}">
+{% endblock headjs %}
+{% block content %}
+    <div id="index-adv-list">
+        {% include "board/advert_for_list.html" %}
+        {% paginate %}
+    </div>
+{% endblock content %}

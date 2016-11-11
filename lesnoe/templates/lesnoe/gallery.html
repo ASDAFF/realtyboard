@@ -1,0 +1,28 @@
+{% extends "lesnoe/base.html" %}
+{% load static %}
+{% block content %}
+<div id="one">
+    <h1 id="title" class="green">Фотогалерея</h1>
+    <div id="prev">
+        <img src="{% static 'lesnoe/img/prev.png' %}" alt="previous">
+    </div>
+    <div id="gallery">
+        <div id="carusel">
+            {% for obj in object_list %}
+                <img src="{{ obj.thumbnail.url }}" alt="image" title="{{ obj.description }}"
+                    full="{{ obj.picture.url }}">
+            {% endfor %}
+        </div>
+    </div>
+    <div id="next">
+        <img src="{% static 'lesnoe/img/next.png' %}" alt="next">
+    </div>
+    <div id="box">
+        <div id="in_box">
+          <img class="box_pic" src="{{ object_list.0.picture.url }}"
+                  id="1">
+          <p class="box_text">{{ object_list.0.description }}</p>
+        </div>
+    </div>      
+</div>
+{% endblock content %}

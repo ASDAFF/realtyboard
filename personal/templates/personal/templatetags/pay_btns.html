@@ -1,0 +1,5 @@
+{% for item in prices %}
+    <button class="pay_btn" value="{{ item.price }}" 
+        title="{{ item.title }}">
+            {{ item.for_btn }} {{ item.price }} грн</button>
+{% endfor %}

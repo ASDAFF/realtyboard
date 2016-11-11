@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load pagination_tags %}
+{% block headjs %}
+    <link href="{% static 'css/pagination.css' %}" rel="stylesheet" media="screen">
+{% endblock%}
+{% block content %}
+    <select onChange="if(value!=''){location=value}"  style="display: table; margin: 50px auto;" >
+        <option value="">Выберите город</option>
+        <option value="/board/files/kharkov">Харьков</option>
+        <option value="/board/files/kiev">Киев</option>
+    </select>
+
+    <p class='files-years' style="display: table; margin: 50px auto;">
+        <a href="">{{ current_name_of_city }}</a></p>
+
+    <p class='files-years' style="display: table; margin: 50px auto;">
+        <a id='y2016' href="?path=2016&city_data=20#y2016">2016</a>
+        <a id='y2015' href="?path=2015&city_data=20#y2015">2015</a>
+        <a id='y2014' href="?path=2014&city_data=20#y2014">2014</a>
+    </p>
+        
+    {% autopaginate dirlist 20 %}
+    {% paginate %}
+    <ul style="display: table; margin: 50px auto; list-style-type: none;">
+        {% for f in dirlist %}
+            <li style="width:400px; text-align:center">
+                <a href="/docs/{{ current }}/{{ path }}/{{ f }}">
+                    <h1>{{ f|cut:"_chast.rar"}} - часть</h1></a></li>
+        {%empty%}
+            <li>Файлы за данный период отсутствуют</li>
+        {% endfor %}
+    </ul>
+    {% paginate %}
+{% endblock %}

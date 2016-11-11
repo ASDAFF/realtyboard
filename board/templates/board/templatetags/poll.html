@@ -1,0 +1,22 @@
+
+<div style="display: inline-block; cursor: pointer;"  ><img class="inay" onclick="$(this).closest('.gridtr').find('.result_poll').slideToggle('slow');" style="width: 20px" src="/static/img/inay.gif" title="Сообщить о посреднике/не актуальности/мошеннике" ></div>
+
+<br>
+<div style="display: none"  class="result_poll"  >
+{% if latest_poll_list %}
+
+    <select style="width: 190px; padding: 0px"  >
+        {% for poll in latest_poll_list %}
+            <option  value="{{ poll.id }}" >{{ poll.question }}</option>
+        {% endfor %}
+    </select>
+
+    <textarea style="width: 177px" class="comment" placeholder="Введите комментарий" ></textarea>
+    <br>
+    <br>
+    <button class="poll" >Отправить</button>
+
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+</div>

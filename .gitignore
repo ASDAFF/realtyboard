@@ -1,0 +1,19 @@
+syntax: glob
+obj
+__pycache__
+media
+static
+sphinx_files
+*.sublime-project
+*.sublime-workspace
+*.pyc
+*.orig
+*.project
+*.pydevproject
+*.pyproj
+*.settings
+*.idea
+*.db
+*.data_db
+sftp-config.json
+local_settings.py

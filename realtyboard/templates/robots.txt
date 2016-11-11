@@ -1,0 +1,5 @@
+<pre>
+User-agent: *
+Disallow: /lucomorye-test
+Disallow: /lesnoe-test
+</pre>

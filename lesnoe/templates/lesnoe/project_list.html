@@ -1,0 +1,47 @@
+{% extends "lesnoe/base.html" %}    
+{% load static %}
+{% block content %}
+<div id="one">
+    <h1 id="title" class="green">Готовые проекты</h1>
+    <div id="one-cont">
+        <br>
+        <p class="proj_p">
+            Если Вы решили обзавестись собственным домом, но еще не знаете с чего начать постройку,
+            то мы рекомендуем Вам воспользоваться каталогом готовых современных европейских
+            проектов от студии "Z500".
+        </p>
+        <p class="proj_p">
+            Приобретающим участок в коттеджном поселке "Лесное" предоставляется каталог с
+            проектами коттеджей и бесплатная консультация по проектированию дома на участке
+            у специалиста по вопросам проектирования и строительства. 
+        </p>
+        <!--p>
+            Для этого вам необходимо связаться с нашим <span class="bold">специалистом по
+            проектированию домов Даниилом по тел. 050-323-55-31</span>.
+        </p-->
+        <div id="proj_list">
+            {% for obj in object_list %}
+                <div class="obj_block">
+                    <a class="green proj1" href="/lesnoe/project/{{ obj.id }}">
+                        {{ obj.description }} 
+                    </a>
+                    <a href="/lesnoe/project/{{ obj.id }}" class="proj1">
+                        <img src="{{ obj.get_main_img }}" class="p_list_img"></a>
+                    <table class="proj_list_table">
+                        <tr class="nechet">
+                            <td>Площадь жилая/общая</td>
+                            <td>{{ obj.area_living }} м/{{ area.total }} м</td>
+                        </tr>
+                        <tr class="chet">
+                            <td>Стоимость проекта</td>
+                            <td>{{ obj.project_price }} грн</td>
+                        </tr>
+                    </table> 
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+        <p class="all_proj green bold">Смотреть все проекты</p>
+    </div>
+</div>
+{% endblock content %}

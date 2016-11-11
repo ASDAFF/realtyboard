@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load static from staticfiles %}
+{% block title %}Регистрация нового пользователя{% endblock title %}
+{% block headjs %}
+    <link rel="stylesheet" href="{% static 'css/personal.css' %}">
+    <script type="text/javascript" src="{% static 'js/personal.js' %}"></script>
+    <script src="//ulogin.ru/js/ulogin.js"></script>
+{% endblock%}
+{% block content %}
+<div class="pers-input">
+    {% if errors %}
+        {% for error in errors.values %}
+            <p class="error">{{ error }}</p>
+        {% endfor %}
+    {% endif %}
+    <form accept-charset="UTF-8" action="" method="post" class='navbar-form' id="register">
+        {% csrf_token %}
+        <div class="pers_table">
+            <div class="pers_t_row">
+                <div class="pers_t_label">Логин*</div>
+                <input name="username" type="text" autofocus id="login" value="{{ username }}">
+                <div id="login_valid" class="yes_no">
+                        <p id="login_pop_up" class="pop_up">Такой логин уже занят!</p>
+                </div>
+            </div>
+            <div class="pers_t_row">
+                <div class="pers_t_label" for="id_mail">mail</div>
+                <input type="text" id="id_mail" name="mail">
+            </div>
+            <div class="pers_t_row">
+                <div class="pers_t_label">E-mail*</div>
+                <input name="email" type="text" id="email" value="{{ email }}"> 
+                <div id="email_valid" class="yes_no">
+                        <p id="email_pop_up" class="pop_up">
+                            Пользователь с таким адресом электронной почты уже существует!</p>
+                </div>
+            </div>
+            <div class="pers_t_row">
+                <div class="pers_t_label">Пароль*</div>
+                <input name="password" type="password" id="pass">
+            </div>
+            <div class="pers_t_row">
+                <div class="pers_t_label">Повторите пароль*</div>
+                <input name="repassword" type="password" id="repass"> 
+                <div id="repass_valid" class="yes_no"></div>
+            </div>
+            <div class="pers_t_row">
+                <div class="pers_t_label">Имя*</div>
+                <input name="firstname" type="text" value="{{ first_name }}"> 
+            </div>
+            <div class="pers_t_row">
+                <div class="pers_t_label">Фамилия</div>
+                <input name="lastname" type="text" value="{{ last_name }}"> 
+            </div>
+            <div class="pers_t_row">
+                <div class="pers_t_label">Телефон*</div>
+                <input name="phone" type="text" value="{{ phone }}" id="phone">   
+                <div id="phone_valid" class="yes_no">
+                        <p id="phone_pop_up" class="pop_up">
+                            Вводите телефон без +38, код города или оператора и номер, всего 10 цифр.</p>
+                        <p id="phone_pop_up2" class="pop_up">
+                            Пользователь с таким номером телефона уже существует!</p>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="search-btn">Зарегистрироваться</button>
+    </form>
+    <p id="ulogin-mes">Вы можете войти на сайт без регистрации, 
+        если у вас есть аккаунт в социальных сетях</p>
+    <div id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,vkontakte,google,odnoklassniki,yandex,mailru,twitter;hidden=;redirect_uri=http%3A%2F%2Fci.ua%2Faccounts%2Fulogin"></div>
+</div>
+{% endblock %}

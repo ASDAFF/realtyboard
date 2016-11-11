@@ -1,0 +1,17 @@
+{% extends "lesnoe/base.html" %}
+{% load static %}
+{% block content %}
+<div id="pod">
+    <div id="left" class="inf">
+        <div class="picture"><img src="{% static 'lesnoe/img/4134.jpg' %}" alt=""></div>
+        <div class="picture"><img src="{% static 'lesnoe/img/145.jpg' %}" alt=""></div>
+        <div class="picture"><img src="{% static 'lesnoe/img/146.jpg' %}" alt="Улица"></div>
+        <div class="picture"><img src="{% static 'lesnoe/img/154.jpg' %}"></div>
+    </div>
+    <div id="right">
+        {{ text.text1|safe }}
+        <br><br>
+    </div>
+    <div class="clear"></div>
+</div>
+{% endblock content %}

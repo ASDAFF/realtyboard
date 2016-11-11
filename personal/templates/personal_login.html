@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load static from staticfiles %}
+{% block title %}Вход{% endblock title %}
+{% block headjs %}
+    <link rel="stylesheet" href="{% static 'css/personal.css' %}">
+    <script src="//ulogin.ru/js/ulogin.js"></script>
+{% endblock %}
+{% block content %} 
+    <div class="pers-input">
+        {% if login_error %}
+            <p class="error">{{ login_error }}</p>
+        {% endif %}
+        <form action="." id="user_login" method="post" class='navbar-form'>
+            {% csrf_token %}
+            <p>Для входа введите свой логин и пароль:</p>
+            <table class="pers_table">
+                <tr>
+                    <td>Логин:</td>
+                    <td><input type="text" name="username" autofocus value="{{ username }}"></td>
+                </tr>
+                <tr>
+                    <td>Пароль:</td>
+                    <td><input type="password" name="password"></td>
+                </tr>
+            </table>
+            <button class="search-btn">Войти</button>
+            <label id="remember_me">
+                <input type="checkbox" name="remember_me" id=""> Запомнить меня
+            </label>
+        </form>
+        <p id="ulogin-mes">Вы можете войти на сайт без регистрации, 
+            если у вас есть аккаунт в социальных сетях</p>
+        <div id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,vkontakte,google,odnoklassniki,yandex,mailru,twitter;hidden=;redirect_uri=http%3A%2F%2Fci.ua%2Faccounts%2Fulogin"></div>
+        <p>Забыли пароль? <a href="{% url 'password_reset' %}" 
+            id="refresh-pass">Восстановить доступ.</a></p>
+        <p><a href="{% url 'register' %}">Регистрация</a> (для нового пользователя)</p>
+    </div>
+{% endblock %}

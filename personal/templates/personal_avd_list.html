@@ -1,0 +1,41 @@
+<div id="adverts-list">
+    {% for advert in object_list %}
+    <!--advert preview START-->
+{#     <!--a href="{{advert.get_absolute_url}}" title="Перейти к объявлению" class="doska_link"-->#}
+        <div class="item-pic">
+            {# <a href="{{ advert.get_absolute_url }}" target="_blank"> #}
+                <img src="{% get_media_prefix %}{{ advert.get_photo_preview }}" alt="нет фотографии" >
+            {# </a> #}
+        </div>
+        <div class="item-info">
+            <p class="bold">
+                {{ advert.price }}{{ advert.currency.CURRENCY_CHOICES }}
+            </p>
+            <p>
+                Обновлено:
+                <br>
+                {{ advert.date_of_update }}
+            </p>
+            <p>
+                Код:{{advert.id}}
+            </p>
+        </div>
+        <div class="item-main">
+            <h3>{{ advert.title }}</h3>
+            <p>
+                {{ advert.main_text }}
+            </p>
+            <p>
+                Тел.
+                {% for phone in advert.phone_set.all %}
+                    380{{ phone.phone }};
+                {% endfor %}
+            </p>
+        </div>
+    </div>
+    <!--advert preview END-->
+    {% empty %}
+    <p>
+        Объектов не обнаружено :(
+    </p>
+    {% endfor %}

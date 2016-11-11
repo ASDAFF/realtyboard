@@ -1,0 +1,333 @@
+{% load staticfiles %}
+{% load static from staticfiles %}
+{% load category %}
+{% load posr %}
+<!doctype html>
+<html>
+<head>
+    <link rel="canonical" href="http://ci.ua/" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name='yandex-verification' content='502208f9237f7576' />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, target-densityDPI=device-dpi" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>
+        {% block title %}
+            Поисковик недвижимости без посредников. Недвижимость Харькова, Киева
+            и Украины | ЦентрИнформ.
+        {% endblock %}
+    </title>
+    <meta name="keywords" content="{% block keywords%}Центринформ, недвижимость
+            Харькова без посредников, аренда, продам квартиру, дом, квартиру,
+            посуточно, сдам, Салтовка, Павлово Поле, ХТЗ, Новые дома, Алексеевка,
+            Пятихатки, Жуковского, Залютино, Холодная гора. {% endblock %}">
+    <meta name="description" content="{% block description %}Центринформ - недвижимость
+            Харькова. База без посредников. Доска бесплатных объявлений: продам,
+            куплю, сдам квартиру Харьков, сниму дом, аренда, посуточно. Салтовка,
+            Павлово Поле, ХТЗ, Новые дома, Алексеевка, Пятихатки, Жуковского, Залютино,
+            Холодная гора. {% endblock description %}  ">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-2.1.0.js' %}" type="text/javascript"></script>
+    <script type="text/javascript" async src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+    <script src="{% static 'js/modernizr.custom.js' %}"></script>
+    <script src="{% static 'js/jquery.dlmenu.js' %}"></script>
+    {% block headjs %}{% endblock headjs %}
+    <!--script type="text/javascript" async src="{% static 'js/jquery.fancybox.pack.js' %}"></script-->
+</head>
+<body>
+    
+    <div id="wrapper">
+        <div id="header">
+            <div id="mainmenu">
+                <ul class="menu">
+                    <li><a href="/">Главная</a></li>
+                    <li>
+                        <a href="{% url 'board-main' %}">Доска объявлений</a>
+                        {% category city_obj.slug %}
+                    </li>
+                    <li>
+                        <a href="/board/grid/">База без посредников</a>
+                        <ul class="first-invisible">
+                            <li><a href="{% url 'list' city_obj.slug %}">Скачать базу</a></li>
+                            <li><a href="/board/grid/">Просмотр на сайте</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{% url 'oplata' %}">Оплата</a>
+                        <ul class="first-invisible">
+                            <li><a href="{% url 'oplata' %}">Способы оплаты, цены</a></li>
+                            <li><a href="{% url 'payment_report' %}">Сообщить об оплате</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/proverka_na_posrednika/">Полезности</a>
+                        <ul class="first-invisible">
+                            <li><a href="/rielter">База Риелтер</a></li>
+                            <li><a href="{% url 'black_list' %}">Черный список</a></li>
+                            <li><a href="http://old.centrinform.info/istochniki">Источники</a></li>
+                            <li><a href="/proverka_na_posrednika/">Проверить телефон на посредника</a></li>
+                            <li><a href="/novosty">Новости недвижимости</a></li>
+                            <li><a href="/statiy/poleznoe">Полезные статьи</a></li>
+                            <li><a href="/zadavaemie_voprosy">Задаваемые вопросы</a></li>
+                            <li><a href="/novovvedeniy_saita">Нововведения сайта </a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'contacts' %}">Контакты</a></li>
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a href="{% url 'profile' %}">Кабинет</a>
+                            <ul class="first-invisible">
+                                <li><a href="{% url 'profile' %}">Войти в кабинет</a></li>
+                                <li><a href="{% url 'property_add' %}" 
+                                    onClick="_gaq.push(['_trackEvent', 'Advert', 'Add', 'Add realty advert'])">Подать объявление</a></li>
+                                <li><a href="{% url 'logout' %}">Выйти</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'login' %}">Войти</a>
+                            <ul class="first-invisible">
+                                <li><a href="{% url 'register' %}"  
+                                    onClick="_gaq.push(['_trackEvent', 'Auth', 'Register', 'Register user'])"
+                                    >Регистрация</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div style="clear:both;"></div>
+
+            {% block search %}
+                <div id="search-menu">
+                    <div id="left-top-bar">
+                        <a href="http://ci.ua" title="Поисковик недвижимости без посредников">
+                            <p class="logo-big-text"><span class="centr">ЦентрИнформ</span></p>
+                            <!-- <img src="static/img/logott.png" alt="#"> -->
+                        </a>
+                    </div>
+                    <div id="center-search-bar">
+                        <form action="" method="get" id="search_query">{% csrf_token %}</form>
+                        <form action="/board/search" id="search-everywhere"></form>
+                        <div id="in-search-bar">
+                            <input id="text-inp" type="text" form="search-everywhere"
+                                    name="just_text"
+                                    placeholder="Введите текст или код объявления"
+                                    value="{%if filterform.just_text.value%}
+                                        {{filterform.just_text.value}}{%endif%}">
+                            {% if city_obj %}
+                                <div id="current-city" slug='{{ city_obj.slug }}' city-id='{{ city_obj.id }}'>
+                                    <span class="region">Ваш регион</span>
+                                    <select id="top-city">
+                                        {% for item in cities_list %}
+                                            {% if city_obj.id == item.id %}
+                                                <option value="{{ item.id }}" selected="true"
+                                                    slug="{{ item.slug }}">{{ item.name }}</option>
+                                            {% else %}
+                                                <option value="{{ item.id }}"
+                                                    slug="{{ item.slug }}">{{ item.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <!-- <div class="triangle-down"></div> -->
+
+                                </div>
+                            {% endif %}
+                        </div>
+                        <input form="search-everywhere" type="submit" value="НАЙТИ" class="btn search">
+                        <input form="search-everywhere" class='without_agent btn' 
+                                value="Без посредников" type='button'/>
+                    </div>
+                    <div id="right-top-bar">
+                        <input type="button" value="ДАТЬ ОБЪЯВЛЕНИЕ" class="add_realty"
+                                onclick="window.location.href='/board/add/'"
+                                title="Бесплатно опубликовать объявление">
+                    </div>
+                    {% posr %}
+                </div>
+                {% endblock %}
+                <div class="mobile-menu">
+                      <div id="dl-menu" class="dl-menuwrapper">
+                         <button class="dl-trigger">Open Menu</button>
+                         <ul class="dl-menu">
+                            <li><a href="/">Главная</a></li>
+                            <li>
+                              <a href="{% url 'board-main' %}">Доска объявлений</a><!-- {% category city_obj.slug %} -->
+                                <ul class="dl-submenu">
+                                 <li>
+                                   <a href="#">Продам</a>
+                                    <ul class="dl-submenu">
+                                        <li><a href="/{{ city_obj.slug }}/prodam-kvartiru">Продам квартиру</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/prodam-gostinku-komnatu">Продам гостинку-комнату</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/prodam-dom">Продам дом</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/prodam-uchastok">Продам участок</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/prodam-kommercheskuyu-nedvizhimost">Продам коммерческую недвижимость</a></li>
+                                    </ul>
+                                 </li>
+                                 <li>
+                                   <a href="#">Сниму</a>
+                                    <ul class="dl-submenu">
+                                        <li><a href="/{{ city_obj.slug }}/snimu-kvartiru">Сниму квартиру</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/snimu-gostinku-komnatu">Сниму гостинку-комнату</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/snimu-dom">Сниму дом</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/snimu-uchastok">Сниму участок</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/snimu-kommercheskuyu-nedvizhimost">Сниму коммерческую недвижимость</a></li>
+                                    </ul>
+                                 </li>
+                                 <li>
+                                   <a href="#">Сдам</a>
+                                   <ul class="dl-submenu">
+                                        <li><a href="/{{ city_obj.slug }}/sdam-kvartiru">Сдам квартиру</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/sdam-gostinku-komnatu">Сдам гостинку-комнату</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/sdam-dom">Сдам дом</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/sdam-uchastok">Сдам участок</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/sdam-kommercheskuyu-nedvizhimost">Сдам коммерческую недвижимость</a></li>
+                                    </ul>
+                                 </li>
+                                 <li>
+                                   <a href="#">Куплю</a>
+                                   <ul class="dl-submenu">
+                                        <li><a href="/{{ city_obj.slug }}/kuplyu-kvartiru">Куплю квартиру</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/kuplyu-gostinku-komnatu">Куплю гостинку-комнату</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/kuplyu-dom">Куплю дом</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/kuplyu-uchastok">Куплю участок</a></li>
+                                        <li><a href="/{{ city_obj.slug }}/kuplyu-kommercheskaya-nedvizhimost">Куплю коммерческую недвижимость</a></li>
+                                    </ul>
+                                 </li>
+                               </ul>
+                           </li>
+                           <li>
+                             <a href="/board/grid/">База без посредников</a>
+                               <ul class="dl-submenu">
+                                 <li>
+                                   <a href="{% url 'list' city_obj.slug %}">Скачать базу</a>
+                                 </li>
+                                 <li>
+                                   <a href="/board/grid/">Просмотр на сайте</a>
+                                 </li>
+                               </ul>
+                           </li>
+                           <li>
+                             <a href="{% url 'oplata' %}">Оплата</a>
+                               <ul class="dl-submenu">
+                                 <li>
+                                   <a href="{% url 'oplata' %}">Способы оплаты, цены</a>
+                                 </li>
+                                 <li>
+                                   <a href="{% url 'payment_report' %}">Сообщить об оплате</a>
+                                 </li>
+                             </ul>
+                           </li>
+                           <li>
+                             <a href="/proverka_na_posrednika/">Полезности</a>
+                               <ul class="dl-submenu">
+                                 <li>
+                                   <a href="/rielter">База Риелтер</a>
+                                 </li>
+                                 <li>
+                                   <a href="{% url 'black_list' %}">Черный список</a>
+                                 </li>
+                                 <li>
+                                   <a href="http://old.centrinform.info/istochniki">Источники</a>
+                                 </li>
+                                 <li>
+                                   <a href="/proverka_na_posrednika/">Проверить телефон на посредника</a>
+                                 </li>
+                                 <li>
+                                   <a href="/novosty">Новости недвижимости</a>
+                                 </li>
+                                 <li>
+                                   <a href="/statiy/poleznoe">Полезные статьи</a>
+                                 </li>
+                                 <li>
+                                   <a href="/zadavaemie_voprosy">Задаваемые вопросы</a>
+                                 </li>
+                                 <li>
+                                   <a href="/novovvedeniy_saita">Нововведения сайта </a>
+                                 </li>
+                             </ul>
+                           </li>
+                           <li>
+                             <a href="{% url 'contacts' %}">Контакты</a>
+                           </li>
+                           {% if user.is_authenticated %}
+                           <li>
+                             <a href="{% url 'profile' %}">Кабинет</a>
+                               <ul class="dl-submenu">
+                                 <li>
+                                   <a href="{% url 'profile' %}">Войти в кабинет</a>
+                                 </li>
+                                 <li>
+                                   <a href="{% url 'property_add' %}" onClick="_gaq.push(['_trackEvent', 'Advert', 'Add', 'Add realty advert'])">Подать объявление</a>
+                                 </li>
+                                 <li>
+                                   <a href="{% url 'logout' %}">Выйти</a>
+                                 </li>
+                             </ul>
+                           </li>{% else %}
+                           <li>
+                             <a href="{% url 'login' %}">Войти</a>
+                               <ul class="dl-submenu">
+                                 <li>
+                                   <a href="{% url 'login' %}">Войти</a>
+                                 </li>
+                                 <li>
+                                   <a href="{% url 'register' %}" onClick="_gaq.push(['_trackEvent', 'Auth', 'Register', 'Register user'])">Регистрация</a>
+                                 </li>
+                             </ul>
+                           </li>
+                           {% endif %}
+                         </ul>
+                      </div>
+                      <!-- /dl-menuwrapper -->
+                </div>
+                <script>
+                   $(function() {
+                      $( '#dl-menu' ).dlmenu({
+                         animationClasses : { classin : 'dl-animate-in-2', classout : 'dl-animate-out-2' }
+                      });
+                   });
+                </script>
+        </div>
+        <div id="content">
+            {% if mesforuser1 %}
+                <!-- <p class="message-for-users">{{ mesforuser1 }}</p> -->
+            {% endif %}
+            <center><p>Объявлений не найдено</p></center>
+            <center><a href="/">Вернуться на главную</a><center>
+        </div>
+
+    </div>
+    <div id="footer">
+        <div id="footer-content">
+            <div id="footer-title">
+                <p class="c-color">ЦентрИнформ</p>
+                <p>Поисковая система недвижимости без посредников</p> 
+            </div>
+            <div id="footer-contacts">
+                <p>Техподдержка сайта:</p>
+                <p>067-57-74-140 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;093-00-99-333</p>
+                <p>099-53-06-621 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 099-08-11-333</p>
+                <p>centrinform@mail.ru</p>
+                <p><span onclick="return location.href = 'http://s57.radikal.ru/i156/1512/68/dcbcd68e23dd.jpg'">C </span>8.00 до 22.00 без выходных.</p>
+            </div>
+            <!--LiveInternet logo-->
+            <a href="http://www.liveinternet.ru/click" id="live-internet" target="_blank"><img src="//counter.yadro.ru/logo?29.11" title="LiveInternet: показано количество просмотров и посетителей" alt="liveinternet" border="0" width="88" height="120"/></a>
+            <!--/LiveInternet-->
+            <!-- <a href="https://plus.google.com/112860037636291152934?rel=author" id="g-plus-icon" target="_blank">
+                <img src="{% static 'images/Gicon-blue-256.png' %}" alt="G+">
+            </a> -->
+            <!-- <div class="city_s"> 
+                <a href="/{{city_obj.slug}}">Недвижимость {{city_obj.name}} </a><br>
+                {% for city in cities_list %}
+                    <a href="/{{city.slug}}">Недвижимость {{city}} </a><br>
+                {% endfor %}
+            </div> -->
+        </div>
+</body>
+</html>
+
+

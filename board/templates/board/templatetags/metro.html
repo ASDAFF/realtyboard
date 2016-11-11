@@ -1,0 +1,39 @@
+<div class="metro-group">
+    <label class="bold">
+        <input type="checkbox" class="metro-head">
+        {{ metro_lines.0.name }} линия
+    </label>
+    {{ filterform.0metro_line }}
+</div>
+{% if metro_lines.1 %}
+    <div class="metro-group">
+        <label class="bold">
+            <input type="checkbox" class="metro-head">
+            {{ metro_lines.1.name }} линия
+        </label>
+        {{ filterform.1metro_line }}
+    </div>
+{% endif %}
+{% if metro_lines.2 %}
+    <div class="metro-group">
+        <label class="bold">
+            <input type="checkbox" class="metro-head">
+            {{ metro_lines.2.name }} линия
+        </label>
+        {{ filterform.2metro_line }}
+    </div>
+{% endif %}
+{% if metro_lines.3 %}
+    <div class="metro-group1">
+        <label class="bold">
+            <div style="display: none"><input type="checkbox" class="metro-head">
+            {{ metro_lines.3.name }}</div>
+        </label>
+        {{ filterform.3metro_line }}
+    </div>
+{% endif %}
+<div class="ok-tab">OK</div>
+
+
+
+

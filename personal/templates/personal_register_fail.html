@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load static from staticfiles %}
+    {% block headjs %}
+     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% endblock%}
+{% block content %}
+<div class="content">
+<form accept-charset="UTF-8" action="." method="post" class='navbar-form' >
+	{% csrf_token %}
+
+{% if email_signup_error %}
+	<p style="color:red;">Пользователь с таким email уже существует</p>
+{% endif %}
+{% if username_signup_error %}
+    <br>
+    <p style="color:red;">Пользователь с таким email уже существует</p>
+    <br>
+{% endif %}
+{% if password_match_error %}
+	<br>
+	<p style="color:red;">Passwords doesn't match</p>
+	<br>
+{% endif %}
+
+<div>
+	<label for="email">E-mail</label><input name="email" id="email" type="text"><br>
+	<label for="password">Password</label><input name="password" id="password" type="password"><br>
+	<label for="repassword">Password again</label><input name="repassword" id="repassword" type="password"><br>
+	<label for="firstname">First Name</label><input name="firstname" id="firstname" type="text"><br>
+	<label for="lastname">Last Name</label><input name="lastname" id="lastname" type="text"><br>
+</div>
+ 
+<input type="submit" value="Регистрация" />
+</form>
+</div>
+{% endblock %}

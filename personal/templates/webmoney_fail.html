@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% load staticfiles %}
+{% load static from staticfiles %}
+{% load pagination_tags %}
+{% block headjs %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            //var i = window.setInterval("document.location.href='/board/grid/?woagent=on'", 5000);
+        });
+    </script>
+{% endblock%}
+
+{% block content %}
+<h4 style="align:center;">Не оплачено):.</h4>
+{% endblock %}

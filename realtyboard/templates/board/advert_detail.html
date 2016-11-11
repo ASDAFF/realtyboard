@@ -1,0 +1,276 @@
+﻿{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load category %}
+{% load static %}
+{% block title %}
+    {{ advert.title }}
+{% endblock %}
+{% block headjs %}
+    <link type="text/css" href="{% static 'css/obj_list.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'js/obj_list.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/detail_view.css' %}">
+    <link rel="stylesheet" href="{% static 'fancybox/source/jquery.fancybox.css?v=2.1.5' %}">
+    <link rel="stylesheet" href="{% static 'fancybox/source/helpers/jquery.fancybox-buttons.css?v=1.0.5' %}">
+    <link rel="stylesheet" href="{% static 'fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7' %}">
+{% endblock headjs %}
+{% block content %}
+    <div id="advert_detail">
+        {{ special_list }}
+        <div id="left_info">
+            <ul>
+                {% if currency == '2'  %}
+                    {% if advert.price_usd %}
+                        <li class="f_name bold">Цена</li>
+                        <li class="f_value bold">{{ advert.price_usd|intspace }} $</li>
+                    {% endif%}
+                {% else %}
+                    {% if advert.price_uah %}
+                        <li class="f_name bold">Цена</li>
+                        <li class="f_value bold">{{ advert.price_uah|intspace }} грн</li>
+                    {% endif%}
+                {% endif%}
+                <li class="f_name">Обновлено</li>
+                <li class="f_value">{{ advert.date_of_update|date:"d.m.y в H:i" }}</li>
+                {% if request.user.is_admin %}
+                    <li class="f_name adm">Создано</li>
+                    <li class="f_value adm">{{ advert.creation_date|date:"d.m.y" }}</li>
+                {% endif %}
+                <li class="f_name">Регион</li>
+                <li class="f_value">{{ advert.city }}</li>
+                {% if advert.sublocality %}
+                    <li class="f_name">Район</li>
+                    <li class="f_value">{{ advert.sublocality.name }}</li>
+                {% elif advert.big_sublocality %}
+                    <li class="f_name">Район</li>
+                    <li class="f_value">{{ advert.big_sublocality }}</li>
+                {% endif %}
+                {% if advert.metro %}
+                    <li class="f_name">Метро</li>
+                    <li class="f_value">{{ advert.metro.name }}</li>
+                {% endif %}
+                {% if advert.street %}
+                    <li class="f_name">Адрес:</li>
+                    <li class="f_value">{{ advert.street }}</li>
+                {% endif %}
+                {% if extra_cat == 'rent' and advert.extrarent.term %}
+                    <li class="f_name">Период аренды</li>
+                    <li class="f_value">{{ advert.extrarent.get_term_display }}</li>
+                {% endif %}
+                {% if extra_lot == 'lot' and advert.extralot.lot_area %}
+                    <li class="f_name">Площадь участка</li>
+                    <li class="f_value">
+                        {{ advert.extralot.lot_area }} {{ advert.extralot.lot_unit }}
+                    </li>
+                {% endif %}
+                {% if extra_obj == 'house' %}
+                    {% if advert.extrahouse.house_type %}
+                        <li class="f_name">Тип</li>
+                        <li class="f_value">{{ advert.extrahouse.get_house_type_display }}</li>
+                    {% endif %}
+                    {% if advert.extrahouse.get_condition_display %}
+                        <li class="f_name">Состояние</li>
+                        <li class="f_value">{{ advert.extrahouse.get_condition_display }}</li>
+                    {% endif %}
+                    {% if advert.extrahouse.total_area %}
+                        <li class="f_name">Площадь дома</li>
+                        <li class="f_value">{{ advert.extrahouse.total_area }} кв.м</li>
+                    {% endif %}
+                    {% if advert.extrahouse.lot_area %}
+                        <li class="f_name">Площадь участка</li>
+                        <li class="f_value">
+                            {{ advert.extrahouse.lot_area }} {{ advert.extrahouse.lot_unit }}
+                        </li>
+                    {% endif %}
+                {% elif extra_obj == 'flat' or extra_obj == 'room' %}
+                    {% if advert.extraflat.total_area %}
+                        <li class="f_name">Общая площадь</li>
+                        <li class="f_value">{{ advert.extraflat.total_area }} кв.м</li>
+                    {% endif %}
+                    {% if advert.extraflat.floor %}
+                        <li class="f_name">Этаж</li>
+                        <li class="f_value">
+                            {{ advert.extraflat.floor }}/{{ advert.extraflat.floors }}
+                        </li>
+                    {% endif %}
+                    {% if advert.extraflat.new_building %}
+                        <li class="f_name">Новострой</li>
+                        <li class="f_value">+</li>
+                    {% endif %}
+                    {% if advert.extraflat.get_condition_display %}
+                        <li class="f_name">Состояние</li>
+                        <li class="f_value">{{ advert.extraflat.get_condition_display }}</li>
+                    {% endif %}
+                {% endif %}
+                {% for f in advert.get_all_extrafield %}
+                    {% if f.0 not in special_field %}
+                        <li class="f_name">{{ f.0 }}</li>
+                        <li class="f_value">{{ f.1 }}</li>
+                    {% endif %}
+                {% endfor %}
+                <li class="f_name">Код объявления</li>
+                <li class="f_value kod">{{ advert.id }}</li>
+            </ul>
+            <table id="contacts">
+                <tr>
+                    <td class="f_name">Контакты</td>
+                    <td>
+                        {% if advert.get_contact_name %}
+                            <p class="f_value">{{ advert.get_contact_name }}</p>
+                        {% endif %}
+                        {% for phone in advert.phone_set.all %}
+                            {% if phone.phone %}
+                                <p class="f_value">
+                                    <a href="/proverka_na_posrednika/?telefon={{ phone }}" 
+                                        target="_blank">{{ phone|phoneformat }}</a>
+                                </p>
+                            {% endif %}
+                        {% empty %}
+                            {% for phone in advert.get_raw_phones %}
+                                <p class="f_value">
+                                    <a href="/proverka_na_posrednika/?telefon={{ phone }}" 
+                                        target="_blank">{{ phone }}</a>
+                                </p>
+                            {% endfor %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+            {% for info in extra_info %}
+                <p class="f_name">{{ info.name }}</p>
+                <p class="f_value">{{ info.value }}</p>
+            {% endfor %}
+            {% if request.user in advert.userdata_set.all %}
+                <img src="{% static 'images/star.png' %}" alt="Удалить из блокноте"
+                    class="star-true" title="Удалить из моего блокнота">    
+            {% else %}
+                <img src="{% static 'images/star-grey.png' %}" alt="Добавить в блокнот"
+                    class="star" title="Добавить в мой блокнот">    
+            {% endif %}
+            {% if request.user.is_admin %}
+                <p class="adm-edit">
+                    <img class="adm-up" src="{% static 'img/up.png' %}" title="Обновить дату">
+                    <a href="{% url 'property_update' pk=advert.id %}">
+                        <img src="{% static 'img/edit.png' %}" alt="Редактировать" 
+                            title="Редактировать"></a>
+                    <a href="{% url 'property_delete' pk=advert.id %}">
+                        <img src="{% static 'img/del.png' %}" alt="Удалить" 
+                            title="Удалить"></a>
+                </p>
+            {% endif %}
+            {% if request.user.is_abonent or request.user.is_admin %}
+                <div id="complaint-sandbox">
+                    <button id="complaint-btn" class="search-btn">Пожаловаться</button>
+                </div>
+            {% endif %}
+            {% if advert.longitude and advert.latitude %}
+                <div id="map" lat="{{ advert.latitude }}" long="{{ advert.longitude }}"></div>
+            {% endif %}
+        </div>
+        <div id="obj-text-photo">
+            <h1>{{ advert.title }}</h1>
+            <p class="justify">{{ advert.main_text }}</p>
+            <div id="photos">
+                {% for photo in advert.photo_set.all %}
+                    <a class="fancybox-thumb" rel="fancybox-thumb" alt="{{advert.title}}"
+                        href="{% get_media_prefix %}{{photo.photo}}" title="{{advert.title}}">
+                        <img src="{% get_media_prefix %}{{photo.preview}}" alt="{{advert.title}}" 
+                        title="{{ advert.title }}"></a>
+                {% endfor %}
+            </div>
+            <div id="qr">
+                <img id="qr-img" src="{{ qr_code }}" title="Ссылка на объявление.">
+                <div id="qr-info" >
+                    <h3>QR-код объявления (ссылка на это объявление)</h3>
+                    <p class="justify">Вы можете сохранить это объявление на телефоне
+                        с помощью программы для считывания QR-кодов.</p>
+                    <input class="search-btn" type="button" value=" Как пользоваться QR-кодом "
+                        onclick="$('#qr_tutor').slideToggle('slow');">
+                </div>
+            </div>
+        </div>
+        <div id="qr_tutor">
+            <h3>Как пользоваться QR-кодом:</h3>
+            <p> Вы можете мгновенно перенести ссылку на мобильный телефон и показать ее в 
+                удобном месте кому ни будь.</p>
+            <iframe src="http://www.youtube.com/embed/lMl96D-79y4" allowfullscreen></iframe>
+        </div>
+        <div id="similar-list">
+            <div class="similar_objects">
+            <h3><a href="/{{advert.city.slug}}/{{advert.category.slug}}/similar/?subloc={{advert.sublocality.id}}" title="Смотреть все похожие объявления"> Похожие объявления: </a></h3> 
+            </div>
+            {% include "board/advert_for_list.html" %}
+        </div>
+    </div>
+    <div id="google-adsense">
+        {% if 11 in banners.keys %}
+            {% banner_tag banners.11 'banner-place1' %}
+        {% else %}   
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- detailciua -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:250px"
+                 data-ad-client="ca-pub-8719193048908072"
+                 data-ad-slot="1126209075"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        {% endif %}
+        {% if 12 in banners.keys %}
+            {% banner_tag banners.12 "banner-place1" %}
+        {% else %}
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- detailciua1 -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:250px"
+                 data-ad-client="ca-pub-8719193048908072"
+                 data-ad-slot="3660873075"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        {% endif %}
+        {% if 13 in banners.keys %}
+            {% banner_tag banners.13 "banner-place1" %}
+        {% else %}
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- detailciua2 -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:250px"
+                 data-ad-client="ca-pub-8719193048908072"
+                 data-ad-slot="7707466274"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        {% endif %}
+    </div>
+    <script>
+        window.user_id = '{{user.id}}';
+        window.user_email = '{{user.email}}';
+    </script>
+    <script id="complaint-form-template" type="text/html">
+        <div id="compl-dialog">
+            <ul class="errors">
+                <li class="email">Введите корректный email</li>
+                <li class="reason">Укажите причину</li>
+            </ul>
+            <label>Ваша почта: <input type="text" class="email"></label>
+            <label>Что не так с объявлением</label>
+            <label><input class="reason-r" name="course" type="radio"> Неверный район/метро</label>
+            <label><input class="reason-r" name="course" type="radio"> Неверная цена</label>
+            <label><input class="reason-r" name="course" type="radio"> Объявление уже неактуально</label>
+            <label><input class="reason-r" name="course" type="radio"> Спам</label>
+            <label><input class="reason-r" name="course" type="radio"> Неверно определен агент/хозяин</label>
+            <label><input class="reason-r" name="course" type="radio"> Другое</label>
+            <input class="reason-t" type="text" disabled="disabled">
+            <button class="submit search-btn">Отправить</button>
+            <button class="cancel search-btn">Отмена</buton>
+        </div>
+    </script>
+    <script type="text/javascript" src="{% static 'js/matreshka-1.3.2/matreshka.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/advert_detail.js' %}"></script>
+    <script type="text/javascript" src="{% static 'fancybox/lib/jquery.mousewheel-3.0.6.pack.js' %}"></script>
+    <script type="text/javascript" src="{% static 'fancybox/source/jquery.fancybox.pack.js?v=2.1.5' %}"></script>
+    <script type="text/javascript" src="{% static 'fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5' %}"></script>
+    <script type="text/javascript" src="{% static 'fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6' %}"></script>
+    <script type="text/javascript" src="{% static 'fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7' %}"></script>
+    <script type="text/javascript" src="{% static 'fancybox/ready.js' %}"></script>
+{% endblock content %}

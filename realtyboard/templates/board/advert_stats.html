@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+
+<p class='files-years' style="display: table; margin: 50px auto;">
+    <a href="/board/advert_stats/kiev/">Киев</a></p>
+<p class='files-years' style="display: table; margin: 50px auto;">
+    <a href="/board/advert_stats/kharkov/">Харьков</a></p>
+
+<select onChange="if(value!=''){location=value}"  style="display: table; margin: 50px auto;" >
+    <option value="">Выберите дату</option>
+    {% for f in list_date %}
+        <option value="{{ f|date:"c" }}">{{ f }}</option>
+    {%empty%}
+        <li>Файлы за данный период отсутствуют</li>
+    {% endfor %}
+
+</select>
+<div class="container">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+      <tr>
+        <th>Ресурсы</th>
+        <th>Продам квартиру</th>
+        <th>Продам комнату</th>
+        <th>Продам дом</th>
+        <th>Продам участок</th>
+        <th>Продам ком.нед.</th>
+        <th>Сдам квартиру</th>
+        <th>Сдам комнату</th>
+        <th>Сдам дом</th>
+        <th>Сдам участок</th>
+        <th>Сдам ком.нед.</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+      {% for f in source_olx %}
+        <th>{{f}}</th>
+      {%empty%}
+      {% endfor %}
+      </tr>
+      <tr>
+      {% for f in source_domik %}
+        <th>{{f}}</th>
+      {%empty%}
+      {% endfor %}
+      </tr>
+      <tr>
+      {% for f in source_premier %}
+        <th>{{f}}</th>
+      {%empty%}
+      {% endfor %}
+      </tr>
+      <tr>
+      {% for f in source_domria %}
+        <th>{{f}}</th>
+      {%empty%}
+      {% endfor %}
+      </tr>
+      <tr>
+      {% for f in source_md %}
+        <th>{{f}}</th>
+      {%empty%}
+      {% endfor %}
+      </tr>
+      <tr>
+      {% for f in source_fn %}
+        <th>{{f}}</th>
+      {%empty%}
+      {% endfor %}
+      </tr>
+      <tr>
+      {% for f in source_mirkvartir %}
+        <th>{{f}}</th>
+      {%empty%}
+      {% endfor %}
+      </tr>
+      <tr>
+      {% for f in source_realt %}
+        <th>{{f}}</th>
+      {%empty%}
+      {% endfor %}
+      </tr>
+      <tr>
+      {% for f in source_aviso %}
+        <th>{{f}}</th>
+      {%empty%}
+      {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock content %}
+
+

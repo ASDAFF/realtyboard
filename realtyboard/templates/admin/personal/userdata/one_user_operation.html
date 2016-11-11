@@ -1,0 +1,19 @@
+<li>
+    <span class="ab-op-dates">
+        {{ item.execution_date|date:"d.m.Y H:i" }} 
+        база {{ item.service.ru_name }}
+        {{ item.get_action_display }}
+        {% if item.expiration_date %}
+            до <span class="baza_do">
+                {{ item.expiration_date|date:"d.m.Y" }}</span> 
+            на {{ item.term }} дней
+        {% endif %}
+    </span>
+    <span class="comment">{{ item.info }}</span>
+    <button class="edit-btn">Редактировать</button>
+    <span class="ch-ab-op">
+        <input type="text">
+        <button value="{{ item.id }}" class="save-ab-op">Сохранить</button>
+        <button class="cancel-ab-op">Отмена</button>  
+    </span>
+</li>

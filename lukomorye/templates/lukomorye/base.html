@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <title>Коттеджный поселок Лукоморье - продажа участков в Харькове, 
+            купить участок, санаторий Роща Харьков</title>
+    <meta name="keywords" content="земельный участок, коттедж, лукоморье, продажа участков">
+    <meta name="description" content="Продажа участков от застройщика в коттеджном городке 
+            Лукоморье в пригороде Харькова вблизи санатория Роща.">
+    <link rel="stylesheet" href="{% static 'lukomorye/style.css' %}">
+    {% block extrahead %}{% endblock extrahead %}
+</head>
+<body>
+    <div id="headerbg"></div>
+    <div id="wrapper">
+        <div id="header">
+            <div id="header1">
+                <h1>ЛУКОМОРЬЕ</h1>
+                <h3>КОТТЕДЖНЫЙ ГОРОДОК У ОЗЕРА</h3>
+                <div id="menu">
+                    <ul>
+                        <li><a href="/lukomorye">Главная</a></li>
+                        <li><a href="/lukomorye/mestoraspolozhenie">Местоположение</a></li>
+                        <li><a href="/lukomorye/plan">Схема городка</a></li>
+                        <li><a href="/lukomorye/opisanie">Описание</a></li>
+                        <li><a href="/lukomorye/gallary">Галлерея</a></li>
+                        <li><a href="/lukomorye/contacts">Контакты</a></li>
+                    </ul>
+                </div>
+            </div>
+            <img id="logo" src="{% static 'lukomorye/images/logo.png' %}" width="100">
+            <!--img id="akcia" src="{% static 'lukomorye/images/ac_to_may.png' %}"-->
+        </div>
+        <div id="container">
+            <div id="middle"> 
+                {% block content %}
+                    
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        Создание сайта &COPY<a href="/">ci.ua</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+</body>
+</html>

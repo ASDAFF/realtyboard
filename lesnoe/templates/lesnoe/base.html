@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Коттеджный поселок Лесное - продажа участков в Харькове, купить участок</title>
+        <link rel="stylesheet" href="{% static 'fancybox/source/jquery.fancybox.css' %}">
+        <link rel="stylesheet" href="{% static 'lesnoe/style.css' %}" type="text/css">
+    <meta charset="utf-8">
+    <meta name="keywords" content="продажа участков, Харьков, коттедж, 
+            земельный участок, купить участок">
+    <meta name="description" content="Отдел продаж КП <<Лесное>> предлагает вам 
+            земельные участки в элитном коттеджном городке">
+</head>
+<body>
+<div id="all">
+    <div id="wrapper">
+        <div id="parallax">
+            <div id="layer1" class="parallax-layer" >
+                <img src="{% static 'lesnoe/img/houses1.jpg' %}"></div>
+            <div id="layer2" class="parallax-layer">
+                <img src="{% static 'lesnoe/img/middle4.png' %}"></div>
+            <div id="layer5" class="parallax-layer">
+                <img src="{% static 'lesnoe/img/man.png' %}"></div>
+            <div id="layer8" class="parallax-layer">
+                <img src="{% static 'lesnoe/img/woman.png' %}"></div>
+            <div id="layer3" class="parallax-layer">
+                <img src="{% static 'lesnoe/img/rose_kiparis.png' %}"></div>
+            <div id="klumba" class="parallax-layer">
+                <img src="{% static 'lesnoe/img/klumba.png' %}"></div>
+        </div>
+        <div id="layer9" class="parallax-layer">
+            <img src="{% static 'lesnoe/img/tree_left.png' %}"></div>
+        <div id="layer10" class="parallax-layer">
+            <img src="{% static 'lesnoe/img/tree_right.png' %}"></div>
+        <div id="layer7" class="parallax-layer">
+            <img src="{% static 'lesnoe/img/lesnoe.png' %}"></div>
+        <div id="contwrap">
+            <header id="header">
+                <ul class="menu">
+                    <li><a href="{% url 'lesnoe' %}">Главная</a></li>
+                    <li><a href="{% url 'lesnoe_plan' %}">План</a></li>
+                    <li><a href="{% url 'lesnoe_infrastruktura' %}">Инфраструктура</a></li>
+                    <li><a href="{% url 'lesnoe_gallery' %}">Фотогалерея</a></li>
+                    <li><a href="{% url 'lesnoe_projects' %}">Проекты домов</a></li>
+                    <li><a href="{% url 'lesnoe_contacts' %}">Контакты</a></li>
+                </ul> 
+            </header>
+            <div id="content">
+            {% block content %}{% endblock content %}
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+        &copy Создание сайта: <a href='/'>Centrinform.info</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+    </footer><!-- #footer -->
+</div>
+<script type="text/javascript" src="{% static 'js/jquery-1.9.0.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.fancybox.pack.js' %}"></script>
+<script type="text/javascript" src="{% static 'lesnoe/my.js' %}"></script>
+</body>
+</html>

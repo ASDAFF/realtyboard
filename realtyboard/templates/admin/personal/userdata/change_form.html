@@ -1,0 +1,80 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% load static from staticfiles %}
+{% block after_submit_buttons %}
+<div>
+    <span>Телефоны:</span>
+    <ul id="phones">
+        {% for phone in phone_list %}
+            <li>0{{ phone }}</li>
+        {% endfor %}
+    </ul>
+</div>
+    <label class="add-phone">Добавить телефон: <input type="text"></label>
+    <div class="add-phone ab_btn">Сохранить</div>
+    <p id="phone-saving-message"></p>
+{% endblock %}
+{% block after_field_sets %}
+    <div id="user-ips">
+        <p>IP пользователя</p>
+        <ul>
+            {% for ip in user_ips %}
+                <li>{{ ip.ip }}</li>    
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+{% block my_block %}
+    <div id="my-manage">
+        <div id="new-pass">
+            <input type="text">
+            <button>Изменить пароль юзера</button>
+        </div>
+        <div id="abonent-block">
+            {% if active_bases %}
+                Активные базы: 
+                {% for active_base in active_bases %}
+                    {{ active_base.ru_name }}
+                {% endfor %}
+            {% endif %}
+            <p>
+                Доступ к базе без посредников 
+                <select id="activating-base">
+                    {% for base in available_bases %}
+                        <option value="{{ base.id }}">{{ base.ru_name }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <button class="set-ab-status ab_btn" value="1">Тест</button>
+            <button class="set-ab-status ab_btn" value="7">Неделя - 0</button>
+            <button class="set-ab-status ab_btn" value="30">Месяц - 0</button>
+            <button class="set-ab-status ab_btn" value="61">2 мес - 0</button>
+            <button class="set-ab-status ab_btn" value="91">3 мес - 0</button>
+            <button class="set-ab-status ab_btn" value="122">4 мес - 0</button>
+            <button class="set-ab-status ab_btn" value="152">5 мес - 0</button>
+            <button class="set-ab-status ab_btn" value="183">6 мес - 0</button>
+            <p>Также можно указать срок в днях:</p>            
+            <input type="text" id="term-hand" placeholder="кол-во дней">
+            <input type="text" placeholder="Комментарий" id="ab-comment">
+            <button id="set_ab_status" class="ab_btn">
+                    Открыть/продлить доступ</button>
+            <button id="remove_ab_status" class="ab_btn">Отключить доступ</button>
+            <ul id="ab-ops">
+                {% for item in ab_operations %}
+                    {% include "admin/personal/userdata/one_user_operation.html" %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="user-mail">
+            <div id="prepare" class="ab_btn">Подготовить</div>
+            <div id="send-mail" class="ab_btn">Отправить письмо</div>
+            <p id="mail-response"></p>
+            <textarea name="mail-text" id="mail-text"></textarea>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+

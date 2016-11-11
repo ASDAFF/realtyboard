@@ -1,0 +1,75 @@
+{% load static %}
+{% load category %}
+{% load static from staticfiles %}
+<div id="index_filter" class='well form-search'>
+    <div id="block-filter-wrap">
+        <div class="block-filter left-block">
+            <div class="i-want">Я хочу {{ filterform.action }}{{ filterform.object_all }}</div>
+            <div id="in-region">В регионе {{ filterform.city }}</div>
+        </div>
+        
+        <div class="block-filter locality">
+            <div id="fldSublocality">
+                Районы: <span class="to-push">выбрать</span>
+                <div id="loc-wrap">
+                    <div id="subloc-tab" class="loc-tab active-tab">Город</div>
+                    <div id="province-tab" class="loc-tab">Область</div>
+                    <img src="{% static 'images/personal/blue_close.png' %}"
+                            class="box-select-close" title="Закрыть">
+                    <div id="sublocality-choice">
+                        {% sublocality_tag filterform big_subloc_list city_obj %}
+                    </div>
+                    <div id="province-choice">
+                        <div class="province-list">
+                            {% if filterform.province %}
+                                {% for item in filterform.province %}
+                                    {{ item }}
+                                {% endfor %}
+                            {% else %}
+                                <p>Для вашего города выбор районов не доступен</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="ok-tab">OK</div>
+                </div>
+            </div>
+            <div id="fldMetro">Метро: <span class="to-push">выбрать</span>
+                <div id="metr-choice">
+                    <img src="{% static 'images/personal/blue_close.png' %}"
+                            class="box-select-close" title="Закрыть">
+                    {% metro_tag filterform metro_lines %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="block-filter RoomsNum">
+            <div id="fldRoomsNum">
+                <div class="room-num">Кол-во комнат: &nbsp;{{ filterform.rooms_num }}</div>
+                <div class="rooms">Комнат: &nbsp;{{ filterform.rooms_num }}</div>
+            </div>
+            <div id="fldObjType">
+                Тип объекта: <span class="to-push">выбрать</span>
+                <div id="object-choice">
+                    {{ filterform.object_type }}
+                    <img src="{% static 'images/personal/blue_close.png' %}"
+                            alt="" class="box-select-close">
+                </div>
+            </div>
+            <div id='price'>
+                Цена от {{ filterform.min_price }}
+                до {{ filterform.max_price }} {{ filterform.currency }}
+            </div>
+        </div>
+        <div class="block-filter index-filter-wrap right-block">
+            {{ filterform.text_filter }}
+            <div>
+                <button id='btn_filter1' class='btn search' form="search_query">
+                    Найти</button>
+                <button id='btn_filter2' class='btn search' form="search_query" 
+                    name="woagent" value="on">НАЙТИ БЕЗ ПОСРЕДНИКОВ</button>
+            </div>
+        </div>
+    </div>
+    <div id="chosen-metro"></div>
+    <div id="chosen-subloc"></div>
+</div>

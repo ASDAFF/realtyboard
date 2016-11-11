@@ -1,0 +1,11 @@
+{% load static %}
+{% load category %}
+<div class="one-comment" commentid="{{ comment.id }}">
+    <div class="comment-date">{{ comment.author.username|hide_mail }}
+        {{ comment.date|date:'d.m.Y H:i' }}</div>
+    <div class="comment-text">{{ comment.text }}</div>
+    {% if request.user.is_admin %}
+        <img src="{% static 'images/trash.png' %}" alt="удалить" class="del-comment"
+            title="Удалить комментарий">
+    {% endif %}
+</div>
